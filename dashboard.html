@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard - NXR</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins,sans-serif;}
+body{background:#000;color:#fff;overflow-x:hidden;}
+
+header{
+display:flex;justify-content:space-between;align-items:center;padding:20px 30px;
+background:#111827;position:sticky;top:0;z-index:100;
+border-bottom:1px solid rgba(255,255,255,0.05);
+}
+
+.logo{font-size:30px;font-weight:800;background:linear-gradient(90deg,#c084fc,#60a5fa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+
+.user-menu{display:flex;align-items:center;gap:15px;}
+.user-avatar{width:45px;height:45px;border-radius:50%;object-fit:cover;cursor:pointer;border:2px solid #7c3aed;}
+.btn-logout{padding:10px 20px;background:#ef4444;border:none;border-radius:10px;color:white;font-weight:700;cursor:pointer;transition:0.3s;}
+.btn-logout:hover{background:#dc2626;}
+
+.main-container{display:flex;min-height:calc(100vh - 85px);}
+
+.sidebar{
+width:280px;background:#111827;padding:20px;border-right:1px solid rgba(255,255,255,0.05);
+overflow-y:auto;
+}
+
+.menu-item{
+padding:15px 20px;margin-bottom:10px;border-radius:15px;
+cursor:pointer;transition:0.3s;display:flex;align-items:center;gap:12px;
+font-weight:600;color:#9ca3af;
+}
+
+.menu-item:hover{background:rgba(124,58,237,0.1);color:#c084fc;}
+.menu-item.active{background:#7c3aed;color:white;}
+.menu-icon{font-size:22px;}
+
+.content{flex:1;padding:30px;overflow-y:auto;}
+
+.section{display:none;}
+.section.active{display:block;}
+
+.section-title{font-size:32px;font-weight:800;margin-bottom:30px;background:linear-gradient(90deg,#c084fc,#60a5fa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;}
+
+.card{
+background:linear-gradient(135deg,rgba(17,24,39,0.98),rgba(2,6,23,0.98));
+border-radius:20px;padding:25px;border:1px solid rgba(255,255,255,0.06);
+transition:0.3s;cursor:pointer;
+}
+
+.card:hover{transform:translateY(-5px);border-color:#7c3aed;box-shadow:0 10px 30px rgba(124,58,237,0.2);}
+.card h3{font-size:22px;color:#c084fc;margin-bottom:10px;}
+.card p{color:#9ca3af;font-size:14px;line-height:1.6;}
+
+.welcome-box{
+background:linear-gradient(135deg,#7c3aed,#2563eb);
+padding:40px;border-radius:20px;margin-bottom:30px;text-align:center;
+}
+
+.welcome-box h2{font-size:36px;margin-bottom:10px;}
+.welcome-box p{font-size:18px;opacity:0.9;}
+
+@media(max-width:768px){
+.sidebar{display:none;}
+.content{padding:20px;}
+}
+</style>
+</head>
+<body>
+
+<header>
+<div class="logo">NXR</div>
+<div class="user-menu">
+<img src="" alt="Avatar" class="user-avatar" id="userAvatar">
+<button class="btn-logout" onclick="logout()">Sair</button>
+</div>
+</header>
+
+<div class="main-container">
+
+<div class="sidebar">
+<div class="menu-item active" data-section="inicio">
+<span class="menu-icon">🏠</span>
+Início
+</div>
+<div class="menu-item" data-section="chat">
+<span class="menu-icon">💬</span>
+Chat
+</div>
+<div class="menu-item" data-section="perfil">
+<span class="menu-icon">👤</span>
+Perfil
+</div>
+<div class="menu-item" data-section="usuarios">
+<span class="menu-icon">👥</span>
+Usuários
+</div>
+<div class="menu-item" data-section="bloqueados">
+<span class="menu-icon">🚫</span>
+Bloqueados
+</div>
+<div class="menu-item" data-section="config">
+<span class="menu-icon">⚙️</span>
+Configurações
+</div>
+</div>
+
+<div class="content">
+
+<div class="section active" id="inicio">
+<div class="welcome-box">
+<h2 id="welcomeName">Bem-vindo!</h2>
+<p>Explore a plataforma e conecte-se com a comunidade</p>
+</div>
+
+<h3 class="section-title">Recursos Principais</h3>
+<div class="cards">
+<div class="card" onclick="showSection('chat')">
+<h3>💬 Chat</h3>
+<p>Converse em tempo real com seus contatos</p>
+</div>
+<div class="card" onclick="showSection('perfil')">
+<h3>👤 Perfil</h3>
+<p>Personalize seu perfil e bio</p>
+</div>
+<div class="card" onclick="showSection('usuarios')">
+<h3>👥 Usuários</h3>
+<p>Explore e conecte-se com outros usuários</p>
+</div>
+<div class="card" onclick="showSection('config')">
+<h3>⚙️ Configurações</h3>
+<p>Ajuste suas preferências de conta</p>
+</div>
+</div>
+</div>
+
+<div class="section" id="chat">
+<h3 class="section-title">Chat</h3>
+<p style="color:#9ca3af;">Sistema de chat em desenvolvimento. Em breve você poderá conversar com outros usuários!</p>
+</div>
+
+<div class="section" id="perfil">
+<h3 class="section-title">Perfil</h3>
+<p style="color:#9ca3af;">Configure seu perfil aqui.</p>
+</div>
+
+<div class="section" id="usuarios">
+<h3 class="section-title">Usuários</h3>
+<div id="usersList"></div>
+</div>
+
+<div class="section" id="bloqueados">
+<h3 class="section-title">Usuários Bloqueados</h3>
+<div id="blockedList"></div>
+</div>
+
+<div class="section" id="config">
+<h3 class="section-title">Configurações</h3>
+<p style="color:#9ca3af;">Configurações da conta.</p>
+</div>
+
+</div>
+
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {getAuth,onAuthStateChanged,signOut} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {getFirestore,doc,getDoc} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+apiKey: "AIzaSyDmuDzQBWi9G1DculuOy69v3BH0ulhUwcM",
+authDomain: "siteoficialgzee.firebaseapp.com",
+projectId: "siteoficialgzee",
+storageBucket: "siteoficialgzee.firebasestorage.app",
+messagingSenderId: "927527396643",
+appId: "1:927527396643:web:e1de375c6994d351995896"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+onAuthStateChanged(auth, async (user) => {
+if(!user){
+window.location.href = "login.html";
+return;
+}
+
+const ref = doc(db,"usuarios",user.uid);
+const snap = await getDoc(ref);
+
+if(snap.exists()){
+const data = snap.data();
+document.getElementById('welcomeName').textContent = `Bem-vindo, ${data.nome}!`;
+document.getElementById('userAvatar').src = data.foto || 'https://via.placeholder.com/45';
+}
+});
+
+window.logout = async () => {
+await signOut(auth);
+window.location.href = "login.html";
+}
+
+window.showSection = (section) => {
+document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
+document.getElementById(section).classList.add('active');
+document.querySelector(`[data-section="${section}"]`).classList.add('active');
+}
+
+document.querySelectorAll('.menu-item').forEach(item => {
+item.addEventListener('click', () => {
+const section = item.dataset.section;
+showSection(section);
+});
+});
+</script>
+
+</body>
+</html>

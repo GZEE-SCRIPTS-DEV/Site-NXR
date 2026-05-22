@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>NXR Aliança - Rede Social Premium</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+html{scroll-behavior:smooth;}
+body{background:#000;color:white;overflow-x:hidden;}
+
+body::before{
+content:'';position:fixed;width:100%;height:100%;
+background:radial-gradient(circle at 20% 50%,#7c3aed 0%,transparent 50%),radial-gradient(circle at 80% 80%,#2563eb 0%,transparent 50%),radial-gradient(circle at 40% 80%,#ec4899 0%,transparent 50%);
+opacity:0.15;z-index:-2;animation:pulse 20s ease-in-out infinite;
+}
+@keyframes pulse{0%,100%{opacity:0.15;}50%{opacity:0.25;}}
+
+body::after{content:'';position:fixed;width:100%;height:100%;background:linear-gradient(to bottom,#000000,#0a0a1e,#000000);z-index:-3;}
+
+header{position:fixed;top:0;left:0;width:100%;padding:20px 40px;display:flex;justify-content:space-between;align-items:center;background:rgba(0,0,0,0.8);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.08);z-index:1000;box-shadow:0 4px 30px rgba(0,0,0,0.5);}
+
+.logo{font-size:42px;font-weight:900;letter-spacing:6px;background:linear-gradient(90deg,#c084fc,#60a5fa,#ec4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;cursor:pointer;transition:0.3s;}
+.logo:hover{transform:scale(1.05);}
+
+.hero{min-height:100vh;display:flex;justify-content:center;align-items:center;text-align:center;padding:140px 20px 60px;}
+.hero-content{max-width:1000px;}
+
+.hero-badge{display:inline-block;padding:10px 25px;background:rgba(124,58,237,0.2);border:1px solid #7c3aed;border-radius:50px;color:#c084fc;font-size:14px;font-weight:700;margin-bottom:30px;animation:glow 2s ease-in-out infinite;}
+@keyframes glow{0%,100%{box-shadow:0 0 20px rgba(124,58,237,0.3);}50%{box-shadow:0 0 40px rgba(124,58,237,0.6);}}
+
+.hero h1{font-size:85px;font-weight:900;margin-bottom:30px;background:linear-gradient(135deg,#ffffff,#c084fc,#60a5fa,#ec4899);background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:gradient 3s linear infinite;}
+@keyframes gradient{0%{background-position:0% 50%;}100%{background-position:200% 50%;}}
+
+.hero p{font-size:24px;color:#9ca3af;line-height:1.8;margin-bottom:50px;}
+
+.hero-buttons{display:flex;justify-content:center;gap:20px;flex-wrap:wrap;}
+.btn{padding:18px 45px;border-radius:50px;font-size:18px;font-weight:700;text-decoration:none;transition:0.4s;border:none;cursor:pointer;}
+.btn-primary{background:linear-gradient(135deg,#7c3aed,#2563eb);color:white;box-shadow:0 10px 40px rgba(124,58,237,0.4);}
+.btn-primary:hover{transform:translateY(-3px);box-shadow:0 15px 50px rgba(124,58,237,0.6);}
+.btn-secondary{background:rgba(15,23,42,0.8);color:#e5e7eb;border:2px solid rgba(255,255,255,0.1);}
+.btn-secondary:hover{border-color:#7c3aed;transform:translateY(-3px);}
+
+.section{padding:100px 20px;}
+.section-title{text-align:center;font-size:55px;font-weight:900;margin-bottom:20px;background:linear-gradient(90deg,#ffffff,#c084fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.section-subtitle{text-align:center;font-size:20px;color:#9ca3af;margin-bottom:80px;}
+
+.cards{max-width:1300px;margin:auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:30px;}
+.card{background:linear-gradient(135deg,rgba(17,24,39,0.98),rgba(2,6,23,0.98));border-radius:30px;padding:40px;border:1px solid rgba(255,255,255,0.06);transition:0.4s;cursor:pointer;}
+.card:hover{transform:translateY(-10px) scale(1.02);border-color:#7c3aed;box-shadow:0 20px 60px rgba(124,58,237,0.3);}
+.card-icon{width:70px;height:70px;background:linear-gradient(135deg,#7c3aed,#2563eb);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:35px;margin-bottom:25px;}
+.card h3{font-size:28px;margin-bottom:15px;color:#c084fc;}
+.card p{font-size:16px;color:#9ca3af;line-height:1.8;}
+
+footer{padding:60px 40px;text-align:center;background:linear-gradient(to top,#020617,#000000);border-top:1px solid rgba(255,255,255,0.05);}
+.footer-logo{font-size:36px;font-weight:900;margin-bottom:20px;background:linear-gradient(90deg,#c084fc,#60a5fa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.copyright{color:#6b7280;font-size:14px;margin-top:30px;}
+
+@media(max-width:768px){
+.logo{font-size:32px;}
+.hero h1{font-size:50px;}
+.hero p{font-size:18px;}
+.btn{width:100%;}
+.section-title{font-size:38px;}
+}
+</style>
+</head>
+<body>
+
+<header>
+<div class="logo">NXR</div>
+</header>
+
+<section class="hero">
+<div class="hero-content">
+<div class="hero-badge">✨ PLATAFORMA PREMIUM 2026</div>
+<h1>NXR ALIANÇA</h1>
+<p>A rede social definitiva para alianças, comunidades e parceiros estratégicos. Sistema moderno com chat em tempo real, perfis personalizáveis e muito mais.</p>
+<div class="hero-buttons">
+<a href="login.html" class="btn btn-primary">🚀 COMEÇAR AGORA</a>
+<a href="#recursos" class="btn btn-secondary">📖 EXPLORAR RECURSOS</a>
+</div>
+</div>
+</section>
+
+<section class="section" id="recursos">
+<h2 class="section-title">RECURSOS PREMIUM</h2>
+<p class="section-subtitle">Tudo que você precisa em uma plataforma</p>
+
+<div class="cards">
+<div class="card">
+<div class="card-icon">💬</div>
+<h3>Chat em Tempo Real</h3>
+<p>Converse com seus contatos instantaneamente. Sistema de mensagens moderno com suporte a texto, emojis e notificações.</p>
+</div>
+
+<div class="card">
+<div class="card-icon">👤</div>
+<h3>Perfil Personalizável</h3>
+<p>Escolha sua foto de perfil da galeria, adicione banner personalizado, bio criativa e muito mais.</p>
+</div>
+
+<div class="card">
+<div class="card-icon">🛡️</div>
+<h3>Controle Total</h3>
+<p>Bloqueie usuários indesejados, gerencie sua privacidade e controle quem pode ver seu perfil.</p>
+</div>
+
+<div class="card">
+<div class="card-icon">🤝</div>
+<h3>Alianças & Grupos</h3>
+<p>Crie e participe de alianças estratégicas. Organize comunidades com sistema completo de moderação.</p>
+</div>
+
+<div class="card">
+<div class="card-icon">📊</div>
+<h3>Dashboard Avançado</h3>
+<p>Painel administrativo completo com estatísticas, análises e controle total sobre sua comunidade.</p>
+</div>
+
+<div class="card">
+<div class="card-icon">⚡</div>
+<h3>Performance</h3>
+<p>Sistema ultra-rápido construído com Firebase. Sincronização instantânea em qualquer dispositivo.</p>
+</div>
+</div>
+</section>
+
+<footer>
+<div class="footer-logo">NXR ALIANÇA</div>
+<p class="copyright">© 2026 NXR Aliança — Todos os direitos reservados.</p>
+</footer>
+
+</body>
+</html>

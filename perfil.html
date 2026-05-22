@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Perfil - NXR</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins,sans-serif;}
+body{background:#000;color:#fff;min-height:100vh;}
+
+header{
+display:flex;justify-content:space-between;align-items:center;padding:20px 30px;
+background:#111827;border-bottom:1px solid rgba(255,255,255,0.05);
+}
+
+.logo{font-size:30px;font-weight:800;background:linear-gradient(90deg,#c084fc,#60a5fa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+
+.btn-back{
+padding:10px 20px;background:rgba(124,58,237,0.1);border:1px solid #7c3aed;
+border-radius:10px;color:#c084fc;font-weight:700;cursor:pointer;text-decoration:none;
+transition:0.3s;
+}
+.btn-back:hover{background:#7c3aed;color:white;}
+
+.profile-container{max-width:900px;margin:0 auto;padding:30px 20px;}
+
+.banner-section{
+position:relative;height:250px;border-radius:20px;overflow:hidden;
+background:linear-gradient(135deg,#7c3aed,#2563eb);margin-bottom:80px;
+}
+
+.banner-img{width:100%;height:100%;object-fit:cover;}
+
+.banner-upload{
+position:absolute;bottom:20px;right:20px;padding:12px 20px;
+background:rgba(0,0,0,0.7);backdrop-filter:blur(10px);border:none;
+border-radius:12px;color:white;font-weight:700;cursor:pointer;transition:0.3s;
+}
+
+.banner-upload:hover{background:rgba(0,0,0,0.9);}
+
+.profile-avatar-section{
+position:absolute;bottom:-60px;left:30px;
+}
+
+.profile-avatar{
+width:140px;height:140px;border-radius:50%;object-fit:cover;
+border:5px solid #000;cursor:pointer;transition:0.3s;
+}
+
+.profile-avatar:hover{transform:scale(1.05);}
+
+.avatar-upload-btn{
+position:absolute;bottom:5px;right:5px;width:40px;height:40px;
+border-radius:50%;background:#7c3aed;border:3px solid #000;
+display:flex;align-items:center;justify-content:center;
+cursor:pointer;font-size:20px;transition:0.3s;
+}
+
+.avatar-upload-btn:hover{transform:scale(1.1);}
+
+.profile-info{padding:20px 30px;}
+
+.profile-name{
+font-size:32px;font-weight:800;margin-bottom:5px;
+display:flex;align-items:center;gap:10px;
+}
+
+.verified-badge{
+width:24px;height:24px;background:#3b82f6;border-radius:50%;
+display:flex;align-items:center;justify-content:center;font-size:14px;
+}
+
+.profile-username{font-size:16px;color:#9ca3af;margin-bottom:20px;}
+
+.profile-bio{
+font-size:16px;color:#e5e7eb;line-height:1.6;margin-bottom:30px;
+padding:20px;background:rgba(17,24,39,0.5);border-radius:15px;
+border:1px solid rgba(255,255,255,0.05);
+}
+
+.profile-stats{
+display:flex;gap:40px;margin-bottom:30px;flex-wrap:wrap;
+}
+
+.stat-item{text-align:center;}
+.stat-number{font-size:28px;font-weight:800;color:#c084fc;}
+.stat-label{font-size:14px;color:#9ca3af;margin-top:5px;}
+
+.edit-section{
+background:rgba(17,24,39,0.8);border-radius:20px;padding:30px;
+border:1px solid rgba(255,255,255,0.05);
+}
+
+.edit-section h3{
+font-size:24px;margin-bottom:25px;
+background:linear-gradient(90deg,#c084fc,#60a5fa);
+-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+
+.form-group{margin-bottom:20px;}
+
+.form-group label{
+display:block;margin-bottom:8px;color:#e5e7eb;font-weight:600;font-size:14px;
+}
+
+.form-group input,.form-group textarea{
+width:100%;padding:15px 20px;border-radius:12px;
+border:1px solid rgba(255,255,255,0.08);background:rgba(15,23,42,0.8);
+color:white;font-size:15px;font-family:inherit;transition:0.3s;
+}
+
+.form-group textarea{resize:vertical;min-height:100px;}
+
+.form-group input:focus,.form-group textarea:focus{
+outline:none;border-color:#7c3aed;box-shadow:0 0 20px rgba(124,58,237,0.3);
+}
+
+.btn-save{
+width:100%;padding:16px;background:linear-gradient(135deg,#7c3aed,#2563eb);
+border:none;border-radius:12px;color:white;font-size:16px;font-weight:700;
+cursor:pointer;transition:0.3s;margin-top:10px;
+}
+
+.btn-save:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(124,58,237,0.4);}
+
+input[type="file"]{display:none;}
+
+.success-msg,.error-msg{
+padding:15px;border-radius:12px;margin-bottom:20px;font-weight:600;
+display:none;
+}
+
+.success-msg{background:rgba(34,197,94,0.1);border:1px solid #22c55e;color:#22c55e;}
+.error-msg{background:rgba(239,68,68,0.1);border:1px solid #ef4444;color:#ef4444;}
+
+@media(max-width:768px){
+.profile-stats{justify-content:center;}
+.profile-name{font-size:24px;}
+}
+</style>
+</head>
+<body>
+
+<header>
+<div class="logo">NXR</div>
+<a href="dashboard.html" class="btn-back">← Voltar</a>
+</header>
+
+<div class="profile-container">
+
+<div class="success-msg" id="successMsg">✓ Perfil atualizado com sucesso!</div>
+<div class="error-msg" id="errorMsg">✗ Erro ao atualizar perfil</div>
+
+<div class="banner-section" id="bannerSection">
+<img src="" alt="Banner" class="banner-img" id="bannerImg" style="display:none;">
+<button class="banner-upload" onclick="document.getElementById('bannerInput').click()">
+📷 Alterar Banner
+</button>
+
+<div class="profile-avatar-section">
+<img src="https://via.placeholder.com/140" alt="Avatar" class="profile-avatar" id="avatarImg">
+<div class="avatar-upload-btn" onclick="document.getElementById('avatarInput').click()">
+📷
+</div>
+</div>
+</div>
+
+<input type="file" id="avatarInput" accept="image/*" onchange="handleAvatarUpload(event)">
+<input type="file" id="bannerInput" accept="image/*" onchange="handleBannerUpload(event)">
+
+<div class="profile-info">
+
+<div class="profile-name">
+<span id="displayName">Carregando...</span>
+<span class="verified-badge" id="verifiedBadge" style="display:none;">✓</span>
+</div>
+
+<div class="profile-username" id="displayUsername">@usuario</div>
+
+<div class="profile-bio" id="displayBio">
+Sem bio configurada ainda...
+</div>
+
+<div class="profile-stats">
+<div class="stat-item">
+<div class="stat-number" id="followersCount">0</div>
+<div class="stat-label">Seguidores</div>
+</div>
+<div class="stat-item">
+<div class="stat-number" id="followingCount">0</div>
+<div class="stat-label">Seguindo</div>
+</div>
+<div class="stat-item">
+<div class="stat-number" id="postsCount">0</div>
+<div class="stat-label">Posts</div>
+</div>
+</div>
+
+</div>
+
+<div class="edit-section">
+<h3>✏️ Editar Perfil</h3>
+
+<div class="form-group">
+<label>Nome</label>
+<input type="text" id="nameInput" placeholder="Seu nome completo">
+</div>
+
+<div class="form-group">
+<label>Nome de usuário</label>
+<input type="text" id="usernameInput" placeholder="@seunome">
+</div>
+
+<div class="form-group">
+<label>Bio</label>
+<textarea id="bioInput" placeholder="Conte um pouco sobre você..."></textarea>
+</div>
+
+<button class="btn-save" onclick="saveProfile()">💾 Salvar Alterações</button>
+</div>
+
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {getAuth,onAuthStateChanged} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {getFirestore,doc,getDoc,updateDoc} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import {getStorage,ref,uploadBytes,getDownloadURL} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+
+const firebaseConfig = {
+apiKey: "AIzaSyDmuDzQBWi9G1DculuOy69v3BH0ulhUwcM",
+authDomain: "siteoficialgzee.firebaseapp.com",
+projectId: "siteoficialgzee",
+storageBucket: "siteoficialgzee.firebasestorage.app",
+messagingSenderId: "927527396643",
+appId: "1:927527396643:web:e1de375c6994d351995896"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const storage = getStorage(app);
+
+let currentUser = null;
+let userData = null;
+
+onAuthStateChanged(auth, async (user) => {
+if(!user){
+window.location.href = "login.html";
+return;
+}
+currentUser = user;
+loadProfile();
+});
+
+async function loadProfile(){
+const ref = doc(db,"usuarios",currentUser.uid);
+const snap = await getDoc(ref);
+
+if(snap.exists()){
+userData = snap.data();
+
+document.getElementById('displayName').textContent = userData.nome;
+document.getElementById('displayUsername').textContent = `@${userData.usuario}`;
+document.getElementById('displayBio').textContent = userData.bio || "Sem bio configurada ainda...";
+
+document.getElementById('nameInput').value = userData.nome;
+document.getElementById('usernameInput').value = userData.usuario;
+document.getElementById('bioInput').value = userData.bio || "";
+
+if(userData.foto){
+document.getElementById('avatarImg').src = userData.foto;
+}
+
+if(userData.banner){
+const bannerImg = document.getElementById('bannerImg');
+bannerImg.src = userData.banner;
+bannerImg.style.display = 'block';
+}
+
+if(userData.verificado){
+document.getElementById('verifiedBadge').style.display = 'inline-flex';
+}
+
+document.getElementById('followersCount').textContent = userData.seguidores?.length || 0;
+document.getElementById('followingCount').textContent = userData.seguindo?.length || 0;
+}
+}
+
+function showMessage(type,msg){
+const el = document.getElementById(type === 'success' ? 'successMsg' : 'errorMsg');
+el.textContent = msg;
+el.style.display = 'block';
+setTimeout(() => el.style.display = 'none', 3000);
+window.scrollTo({top:0,behavior:'smooth'});
+}
+
+window.handleAvatarUpload = async (event) => {
+const file = event.target.files[0];
+if(!file) return;
+
+if(file.size > 5*1024*1024){
+showMessage('error','✗ Imagem muito grande! Máximo 5MB');
+return;
+}
+
+try{
+const reader = new FileReader();
+reader.onload = (e) => {
+document.getElementById('avatarImg').src = e.target.result;
+};
+reader.readAsDataURL(file);
+
+const storageRef = ref(storage,`avatars/${currentUser.uid}_${Date.now()}`);
+await uploadBytes(storageRef,file);
+const url = await getDownloadURL(storageRef);
+
+const userRef = doc(db,"usuarios",currentUser.uid);
+await updateDoc(userRef,{foto:url});
+
+showMessage('success','✓ Foto de perfil atualizada!');
+}catch(e){
+showMessage('error','✗ Erro ao fazer upload da foto');
+}
+}
+
+window.handleBannerUpload = async (event) => {
+const file = event.target.files[0];
+if(!file) return;
+
+if(file.size > 10*1024*1024){
+showMessage('error','✗ Imagem muito grande! Máximo 10MB');
+return;
+}
+
+try{
+const reader = new FileReader();
+reader.onload = (e) => {
+const bannerImg = document.getElementById('bannerImg');
+bannerImg.src = e.target.result;
+bannerImg.style.display = 'block';
+};
+reader.readAsDataURL(file);
+
+const storageRef = ref(storage,`banners/${currentUser.uid}_${Date.now()}`);
+await uploadBytes(storageRef,file);
+const url = await getDownloadURL(storageRef);
+
+const userRef = doc(db,"usuarios",currentUser.uid);
+await updateDoc(userRef,{banner:url});
+
+showMessage('success','✓ Banner atualizado!');
+}catch(e){
+showMessage('error','✗ Erro ao fazer upload do banner');
+}
+}
+
+window.saveProfile = async () => {
+const nome = document.getElementById('nameInput').value.trim();
+const usuario = document.getElementById('usernameInput').value.trim().replace('@','');
+const bio = document.getElementById('bioInput').value.trim();
+
+if(!nome || !usuario){
+showMessage('error','✗ Nome e usuário são obrigatórios!');
+return;
+}
+
+if(usuario.length < 3){
+showMessage('error','✗ Usuário deve ter no mínimo 3 caracteres!');
+return;
+}
+
+try{
+const userRef = doc(db,"usuarios",currentUser.uid);
+await updateDoc(userRef,{nome,usuario,bio});
+
+document.getElementById('displayName').textContent = nome;
+document.getElementById('displayUsername').textContent = `@${usuario}`;
+document.getElementById('displayBio').textContent = bio || "Sem bio configurada ainda...";
+
+showMessage('success','✓ Perfil atualizado com sucesso!');
+}catch(e){
+showMessage('error','✗ Erro ao atualizar perfil');
+}
+}
+</script>
+
+</body>
+</html>
