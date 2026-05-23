@@ -169,73 +169,114 @@ import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/
 import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const app = initializeApp({
-apiKey: "AIzaSyDmuDzQBWi9G1DculuOy69v3BH0ulhUwcM",
-authDomain: "siteoficialgzee.firebaseapp.com",
-projectId: "siteoficialgzee"
+  apiKey: "AIzaSyDmuDzQBWi9G1DculuOy69v3BH0ulhUwcM",
+  authDomain: "siteoficialgzee.firebaseapp.com",
+  projectId: "siteoficialgzee",
+  storageBucket: "siteoficialgzee.firebasestorage.app",
+  messagingSenderId: "927527396643",
+  appId: "1:927527396643:web:e1de375c6994d351995896"
 });
 
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-let uidAtual = null;
-let perfilUid = new URLSearchParams(location.search).get("uid");
+let currentUser = null;
+
+const params = new URLSearchParams(window.location.search);
+let perfilUid = params.get("uid");
+
+function avatarPadrao(nome){
+  return `https://ui-avatars.com/api/?name=${encodeURIComponent(nome || "Usuario")}&background=7c3aed&color=fff`;
+}
+
+function bannerPadrao(){
+  return "https://picsum.photos/1200/300";
+}
 
 onAuthStateChanged(auth, async(user)=>{
+  if(!user){
+    window.location.href = "login.html";
+    return;
+  }
 
-if(!user){
-location.href="login.html";
-return;
-}
+  currentUser = user;
 
-uidAtual = user.uid;
+  if(!perfilUid){
+    perfilUid = user.uid;
+  }
 
-if(!perfilUid) perfilUid = user.uid;
-
-load(perfilUid);
-
+  carregarPerfil(perfilUid);
 });
 
-async function load(uid){
+async function carregarPerfil(uid){
+  const ref = doc(db, "usuarios", uid);
+  const snap = await getDoc(ref);
 
-const snap = await getDoc(doc(db,"usuarios",uid));
-if(!snap.exists()) return;
+  if(!snap.exists()){
+    document.getElementById("displayName").textContent = "Usuário não encontrado";
+    document.getElementById("displayUsername").textContent = "@erro";
+    document.getElementById("displayBio").textContent = "Esse usuário não existe no Firestore.";
+    return;
+  }
 
-const u = snap.data();
+  const u = snap.data();
 
-name.textContent = u.nome || "Sem nome";
-user.textContent = "@" + (u.usuario || "user");
-bio.textContent = u.bio || "Sem bio";
+  document.getElementById("displayName").textContent = u.nome || "Usuário";
+  document.getElementById("displayUsername").textContent = "@" + (u.usuario || "user");
+  document.getElementById("displayBio").textContent = u.bio || "Sem bio...";
 
-avatarImg.src = u.foto || avatarImg.src;
-bannerImg.src = u.banner || "";
+  document.getElementById("avatarImg").src = u.foto || avatarPadrao(u.nome);
 
-followers.textContent = (u.seguidores||[]).length;
-following.textContent = (u.seguindo||[]).length;
+  const banner = document.getElementById("bannerImg");
+  banner.src = u.banner || bannerPadrao();
+  banner.style.display = "block";
 
-if(uid !== uidAtual){
-editBox.classList.add("hidden");
+  document.getElementById("followersCount").textContent = (u.seguidores || []).length;
+  document.getElementById("followingCount").textContent = (u.seguindo || []).length;
+
+  if(document.getElementById("postsCount")){
+    document.getElementById("postsCount").textContent = "0";
+  }
+
+  document.getElementById("nameInput").value = u.nome || "";
+  document.getElementById("usernameInput").value = u.usuario || "";
+  document.getElementById("bioInput").value = u.bio || "";
+
+  if(document.getElementById("fotoInput")){
+    document.getElementById("fotoInput").value = u.foto || "";
+  }
+
+  if(document.getElementById("bannerInput")){
+    document.getElementById("bannerInput").value = u.banner || "";
+  }
+
+  if(uid !== currentUser.uid){
+    document.querySelector(".edit-section").style.display = "none";
+  }
 }
 
-nameInput.value = u.nome || "";
-userInput.value = u.usuario || "";
-bioInput.value = u.bio || "";
+window.saveProfile = async()=>{
+  const nome = document.getElementById("nameInput").value.trim();
+  const usuario = document.getElementById("usernameInput").value.trim().replace("@","");
+  const bio = document.getElementById("bioInput").value.trim();
 
-}
+  const fotoInput = document.getElementById("fotoInput");
+  const bannerInput = document.getElementById("bannerInput");
 
-window.save = async ()=>{
+  const foto = fotoInput ? fotoInput.value.trim() : "";
+  const banner = bannerInput ? bannerInput.value.trim() : "";
 
-await updateDoc(doc(db,"usuarios",uidAtual),{
-nome:nameInput.value,
-usuario:userInput.value,
-bio:bioInput.value,
-foto:avatarInput.value,
-banner:bannerInput.value
-});
+  await updateDoc(doc(db, "usuarios", currentUser.uid), {
+    nome,
+    usuario,
+    bio,
+    foto,
+    banner
+  });
 
-alert("Salvo!");
-location.reload();
-
-}
+  alert("Perfil salvo!");
+  location.reload();
+};
 
 </script>
 
