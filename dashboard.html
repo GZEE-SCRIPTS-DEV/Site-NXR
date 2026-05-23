@@ -486,13 +486,12 @@ gap:20px;
 
 <div class="main">
 
-<!-- HEADER -->
-
 <div class="header">
 
 <h1>NXR Dashboard</h1>
 
-<button class="profile-btn"
+<button
+class="profile-btn"
 onclick="window.location.href='perfil.html'">
 Meu Perfil
 </button>
@@ -508,8 +507,8 @@ Meu Perfil
 <br>
 
 <p>
-Sistema completo com usuários, chat,
-feed, perfil e comunidade.
+Sistema completo com usuários,
+feed, chat e perfis.
 </p>
 
 </div>
@@ -539,7 +538,7 @@ placeholder="O que você quer postar?"></textarea>
 <input
 type="text"
 id="media"
-placeholder="Cole link da imagem ou vídeo">
+placeholder="Cole o link da imagem ou vídeo">
 
 <button onclick="criarPost()">
 Postar
@@ -632,8 +631,6 @@ Editar Perfil
 
 <script type="module">
 
-/* FIREBASE */
-
 import { initializeApp }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
@@ -656,16 +653,17 @@ onAuthStateChanged
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-/* CONFIG */
+/* FIREBASE */
 
 const firebaseConfig = {
 
-apiKey: "AIzaSyDmuDzQBWi9G1DculuOy69v3BH0ulhUwcM",
-authDomain: "siteoficialgzee.firebaseapp.com",
-projectId: "siteoficialgzee",
-storageBucket: "siteoficialgzee.firebasestorage.app",
-messagingSenderId: "927527396643",
-appId: "1:927527396643:web:e1de375c6994d351995896"
+apiKey: "SUA_API_KEY",
+authDomain: "SEU_AUTH_DOMAIN",
+projectId: "SEU_PROJECT_ID",
+storageBucket: "SEU_BUCKET",
+messagingSenderId: "SEU_SENDER_ID",
+appId: "SEU_APP_ID"
+
 };
 
 const app = initializeApp(firebaseConfig);
@@ -720,7 +718,8 @@ const uid = docSnap.id;
 
 div.innerHTML += `
 
-<div class="user-card"
+<div
+class="user-card"
 onclick="window.location.href='perfil.html?uid=${uid}'">
 
 <img
@@ -733,7 +732,7 @@ src="${u.foto || 'https://cdn-icons-png.flaticon.com/512/149/149071.png'}">
 
 <div class="user-name">
 
-${u.nome || "Usuário"}
+${u.nome || 'Usuário'}
 
 ${u.verificado
 ? '<span class="verified">✔</span>'
@@ -746,7 +745,7 @@ ${u.betaTester
 </div>
 
 <div class="user-user">
-@${u.usuario || "user"}
+@${u.usuario || 'user'}
 </div>
 
 <div class="user-stats">
@@ -774,8 +773,6 @@ ${u.betaTester
 /* POSTS */
 
 window.criarPost = async()=>{
-
-if(!me) return;
 
 const legenda =
 document.getElementById("caption").value;
@@ -807,8 +804,6 @@ document.getElementById("media").value="";
 loadFeed();
 
 };
-
-/* LOAD FEED */
 
 async function loadFeed(){
 
@@ -879,7 +874,9 @@ src="${p.media}">`
 }
 
 <div class="post-caption">
-${p.legenda || ""}
+
+${p.legenda || ''}
+
 </div>
 
 <div class="post-actions">
@@ -910,12 +907,10 @@ const div =
 document.getElementById("chatMessages");
 
 onSnapshot(
-
 query(
 collection(db,"chat"),
 orderBy("timestamp","asc")
 ),
-
 (snapshot)=>{
 
 div.innerHTML = "";
@@ -943,8 +938,6 @@ div.scrollTop = div.scrollHeight;
 });
 
 }
-
-/* ENVIAR MENSAGEM */
 
 window.enviarMensagem = async()=>{
 
