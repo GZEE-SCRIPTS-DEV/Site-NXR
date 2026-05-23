@@ -12,15 +12,20 @@
 body{background:#000;color:#fff;min-height:100vh;}
 
 header{
-display:flex;justify-content:space-between;align-items:center;
-padding:20px;background:#111827;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:20px;
+background:#111827;
 border-bottom:1px solid rgba(255,255,255,0.05);
 }
 
 .logo{
-font-size:28px;font-weight:800;
+font-size:28px;
+font-weight:800;
 background:linear-gradient(90deg,#c084fc,#60a5fa);
--webkit-background-clip:text;-webkit-text-fill-color:transparent;
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
 }
 
 .btn-back{
@@ -29,41 +34,58 @@ background:#1f2937;
 border-radius:10px;
 color:white;
 text-decoration:none;
+font-weight:700;
 }
 
-/* PROFILE */
-.container{max-width:900px;margin:auto;padding:20px;}
+.container{
+max-width:900px;
+margin:auto;
+padding:20px;
+}
 
 .banner{
 height:220px;
 border-radius:20px;
 background:#111827;
-overflow:hidden;
+overflow:visible;
 position:relative;
+margin-bottom:80px;
 }
 
-.banner img{width:100%;height:100%;object-fit:cover;}
+.banner-img{
+width:100%;
+height:100%;
+object-fit:cover;
+border-radius:20px;
+}
 
 .avatar{
-width:120px;height:120px;border-radius:50%;
+width:120px;
+height:120px;
+border-radius:50%;
 border:4px solid #000;
 object-fit:cover;
 position:absolute;
-bottom:-60px;left:20px;
+bottom:-60px;
+left:20px;
 background:#222;
 }
 
 .info{
-margin-top:70px;
+margin-top:20px;
 }
 
 .name{
-font-size:28px;font-weight:800;
-display:flex;gap:10px;align-items:center;
+font-size:28px;
+font-weight:800;
+display:flex;
+gap:8px;
+align-items:center;
 }
 
 .user{
 color:#9ca3af;
+margin-top:5px;
 }
 
 .bio{
@@ -71,18 +93,38 @@ margin-top:15px;
 background:#111827;
 padding:15px;
 border-radius:15px;
+color:#d1d5db;
 }
 
 .stats{
-display:flex;gap:30px;margin-top:20px;
+display:flex;
+gap:30px;
+margin-top:20px;
 }
 
-.stats div{
-text-align:center;
+.stats div{text-align:center;}
+.stats b{font-size:22px;color:#c084fc;}
+
+.verified{
+width:20px;
+height:20px;
+border-radius:50%;
+background:#3b82f6;
+display:inline-flex;
+align-items:center;
+justify-content:center;
+font-size:12px;
 }
 
-.stats b{
-font-size:22px;color:#c084fc;
+.beta{
+width:20px;
+height:20px;
+border-radius:50%;
+background:#f59e0b;
+display:inline-flex;
+align-items:center;
+justify-content:center;
+font-size:12px;
 }
 
 .edit{
@@ -90,6 +132,10 @@ margin-top:30px;
 background:#111827;
 padding:20px;
 border-radius:20px;
+}
+
+.edit h3{
+margin-bottom:15px;
 }
 
 input,textarea{
@@ -100,6 +146,12 @@ border-radius:10px;
 border:none;
 background:#0f172a;
 color:white;
+outline:none;
+}
+
+textarea{
+min-height:100px;
+resize:vertical;
 }
 
 button{
@@ -114,7 +166,28 @@ font-weight:700;
 cursor:pointer;
 }
 
-.hidden{display:none;}
+.hidden{
+display:none;
+}
+
+@media(max-width:700px){
+.avatar{
+left:50%;
+transform:translateX(-50%);
+}
+
+.info{
+text-align:center;
+}
+
+.name{
+justify-content:center;
+}
+
+.stats{
+justify-content:center;
+}
+}
 </style>
 </head>
 
@@ -128,53 +201,82 @@ cursor:pointer;
 <div class="container">
 
 <div class="banner">
-<img id="bannerImg" src="">
+<img id="bannerImg" class="banner-img" src="https://picsum.photos/1200/300">
 <img id="avatarImg" class="avatar" src="https://cdn-icons-png.flaticon.com/512/149/149071.png">
 </div>
 
 <div class="info">
+
 <div class="name">
-<span id="name">Carregando...</span>
+<span id="displayName">Carregando...</span>
+<span id="verifiedBadge"></span>
+<span id="betaBadge"></span>
 </div>
 
-<div class="user" id="user">@user</div>
+<div class="user" id="displayUsername">@user</div>
 
-<div class="bio" id="bio">...</div>
+<div class="bio" id="displayBio">...</div>
 
 <div class="stats">
-<div><b id="followers">0</b><p>Seguidores</p></div>
-<div><b id="following">0</b><p>Seguindo</p></div>
+<div>
+<b id="followersCount">0</b>
+<p>Seguidores</p>
 </div>
+
+<div>
+<b id="followingCount">0</b>
+<p>Seguindo</p>
+</div>
+
+<div>
+<b id="postsCount">0</b>
+<p>Posts</p>
+</div>
+</div>
+
 </div>
 
 <div class="edit" id="editBox">
 <h3>Editar perfil</h3>
 
 <input id="nameInput" placeholder="Nome">
-<input id="userInput" placeholder="Usuário">
+<input id="usernameInput" placeholder="Usuário">
 <textarea id="bioInput" placeholder="Bio"></textarea>
 
-<input id="avatarInput" placeholder="URL da foto">
+<input id="fotoInput" placeholder="URL da foto">
 <input id="bannerInput" placeholder="URL do banner">
 
-<button onclick="save()">Salvar</button>
+<button onclick="saveProfile()">Salvar</button>
 </div>
 
 </div>
 
 <script type="module">
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+import {
+getAuth,
+onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+getFirestore,
+doc,
+getDoc,
+updateDoc,
+collection,
+query,
+where,
+getDocs
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const app = initializeApp({
-  apiKey: "AIzaSyDmuDzQBWi9G1DculuOy69v3BH0ulhUwcM",
-  authDomain: "siteoficialgzee.firebaseapp.com",
-  projectId: "siteoficialgzee",
-  storageBucket: "siteoficialgzee.firebasestorage.app",
-  messagingSenderId: "927527396643",
-  appId: "1:927527396643:web:e1de375c6994d351995896"
+apiKey: "AIzaSyDmuDzQBWi9G1DculuOy69v3BH0ulhUwcM",
+authDomain: "siteoficialgzee.firebaseapp.com",
+projectId: "siteoficialgzee",
+storageBucket: "siteoficialgzee.firebasestorage.app",
+messagingSenderId: "927527396643",
+appId: "1:927527396643:web:e1de375c6994d351995896"
 });
 
 const auth = getAuth(app);
@@ -186,98 +288,137 @@ const params = new URLSearchParams(window.location.search);
 let perfilUid = params.get("uid");
 
 function avatarPadrao(nome){
-  return `https://ui-avatars.com/api/?name=${encodeURIComponent(nome || "Usuario")}&background=7c3aed&color=fff`;
+return `https://ui-avatars.com/api/?name=${encodeURIComponent(nome || "Usuario")}&background=7c3aed&color=fff`;
 }
 
 function bannerPadrao(){
-  return "https://picsum.photos/1200/300";
+return "https://picsum.photos/1200/300";
 }
 
 onAuthStateChanged(auth, async(user)=>{
-  if(!user){
-    window.location.href = "login.html";
-    return;
-  }
+if(!user){
+window.location.href = "login.html";
+return;
+}
 
-  currentUser = user;
+currentUser = user;
 
-  if(!perfilUid){
-    perfilUid = user.uid;
-  }
+if(!perfilUid){
+perfilUid = user.uid;
+}
 
-  carregarPerfil(perfilUid);
+carregarPerfil(perfilUid);
 });
 
 async function carregarPerfil(uid){
-  const ref = doc(db, "usuarios", uid);
-  const snap = await getDoc(ref);
 
-  if(!snap.exists()){
-    document.getElementById("displayName").textContent = "Usuário não encontrado";
-    document.getElementById("displayUsername").textContent = "@erro";
-    document.getElementById("displayBio").textContent = "Esse usuário não existe no Firestore.";
-    return;
-  }
+const snap = await getDoc(doc(db,"usuarios",uid));
 
-  const u = snap.data();
+if(!snap.exists()){
+document.getElementById("displayName").textContent = "Usuário não encontrado";
+document.getElementById("displayUsername").textContent = "@erro";
+document.getElementById("displayBio").textContent = "Esse usuário não existe no DataCenter.";
+document.getElementById("editBox").classList.add("hidden");
+return;
+}
 
-  document.getElementById("displayName").textContent = u.nome || "Usuário";
-  document.getElementById("displayUsername").textContent = "@" + (u.usuario || "user");
-  document.getElementById("displayBio").textContent = u.bio || "Sem bio...";
+const u = snap.data();
 
-  document.getElementById("avatarImg").src = u.foto || avatarPadrao(u.nome);
+document.getElementById("displayName").textContent =
+u.nome || "Usuário";
 
-  const banner = document.getElementById("bannerImg");
-  banner.src = u.banner || bannerPadrao();
-  banner.style.display = "block";
+document.getElementById("displayUsername").textContent =
+"@" + (u.usuario || "user");
 
-  document.getElementById("followersCount").textContent = (u.seguidores || []).length;
-  document.getElementById("followingCount").textContent = (u.seguindo || []).length;
+document.getElementById("displayBio").textContent =
+u.bio || "Sem bio...";
 
-  if(document.getElementById("postsCount")){
-    document.getElementById("postsCount").textContent = "0";
-  }
+document.getElementById("avatarImg").src =
+u.foto || avatarPadrao(u.nome);
 
-  document.getElementById("nameInput").value = u.nome || "";
-  document.getElementById("usernameInput").value = u.usuario || "";
-  document.getElementById("bioInput").value = u.bio || "";
+document.getElementById("bannerImg").src =
+u.banner || bannerPadrao();
 
-  if(document.getElementById("fotoInput")){
-    document.getElementById("fotoInput").value = u.foto || "";
-  }
+document.getElementById("followersCount").textContent =
+(u.seguidores || []).length;
 
-  if(document.getElementById("bannerInput")){
-    document.getElementById("bannerInput").value = u.banner || "";
-  }
+document.getElementById("followingCount").textContent =
+(u.seguindo || []).length;
 
-  if(uid !== currentUser.uid){
-    document.querySelector(".edit-section").style.display = "none";
-  }
+if(u.verificado){
+document.getElementById("verifiedBadge").innerHTML =
+`<span class="verified">✔</span>`;
+}
+
+if(u.betaTester){
+document.getElementById("betaBadge").innerHTML =
+`<span class="beta">⚒️</span>`;
+}
+
+const postsSnap = await getDocs(
+query(
+collection(db,"posts"),
+where("uid","==",uid)
+)
+);
+
+document.getElementById("postsCount").textContent =
+postsSnap.size;
+
+if(uid !== currentUser.uid){
+document.getElementById("editBox").classList.add("hidden");
+return;
+}
+
+document.getElementById("nameInput").value =
+u.nome || "";
+
+document.getElementById("usernameInput").value =
+u.usuario || "";
+
+document.getElementById("bioInput").value =
+u.bio || "";
+
+document.getElementById("fotoInput").value =
+u.foto || "";
+
+document.getElementById("bannerInput").value =
+u.banner || "";
 }
 
 window.saveProfile = async()=>{
-  const nome = document.getElementById("nameInput").value.trim();
-  const usuario = document.getElementById("usernameInput").value.trim().replace("@","");
-  const bio = document.getElementById("bioInput").value.trim();
 
-  const fotoInput = document.getElementById("fotoInput");
-  const bannerInput = document.getElementById("bannerInput");
+const nome =
+document.getElementById("nameInput").value.trim();
 
-  const foto = fotoInput ? fotoInput.value.trim() : "";
-  const banner = bannerInput ? bannerInput.value.trim() : "";
+const usuario =
+document.getElementById("usernameInput").value.trim().replace("@","");
 
-  await updateDoc(doc(db, "usuarios", currentUser.uid), {
-    nome,
-    usuario,
-    bio,
-    foto,
-    banner
-  });
+const bio =
+document.getElementById("bioInput").value.trim();
 
-  alert("Perfil salvo!");
-  location.reload();
+const foto =
+document.getElementById("fotoInput").value.trim();
+
+const banner =
+document.getElementById("bannerInput").value.trim();
+
+if(!nome || !usuario){
+alert("Nome e usuário são obrigatórios.");
+return;
+}
+
+await updateDoc(doc(db,"usuarios",currentUser.uid),{
+nome,
+usuario,
+bio,
+foto,
+banner
+});
+
+alert("Perfil salvo!");
+location.reload();
 };
-
 </script>
 
 </body>
