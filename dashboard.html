@@ -3,176 +3,539 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard - NXR</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<title>NXR Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins,sans-serif;}
-body{background:#000;color:#fff;overflow-x:hidden;}
-
-header{
-display:flex;justify-content:space-between;align-items:center;padding:20px 30px;
-background:#111827;position:sticky;top:0;z-index:100;
-border-bottom:1px solid rgba(255,255,255,0.05);
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
 }
 
-.logo{font-size:30px;font-weight:800;background:linear-gradient(90deg,#c084fc,#60a5fa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-
-.user-menu{display:flex;align-items:center;gap:15px;}
-.user-avatar{width:45px;height:45px;border-radius:50%;object-fit:cover;cursor:pointer;border:2px solid #7c3aed;}
-.btn-logout{padding:10px 20px;background:#ef4444;border:none;border-radius:10px;color:white;font-weight:700;cursor:pointer;transition:0.3s;}
-.btn-logout:hover{background:#dc2626;}
-
-.main-container{display:flex;min-height:calc(100vh - 85px);}
+body{
+    background:#0b0b0f;
+    color:white;
+    display:flex;
+    min-height:100vh;
+    overflow:hidden;
+}
 
 .sidebar{
-width:280px;background:#111827;padding:20px;border-right:1px solid rgba(255,255,255,0.05);
-overflow-y:auto;
+    width:260px;
+    background:#111118;
+    border-right:1px solid rgba(255,255,255,0.08);
+    padding:25px;
+    display:flex;
+    flex-direction:column;
+    gap:15px;
 }
 
-.menu-item{
-padding:15px 20px;margin-bottom:10px;border-radius:15px;
-cursor:pointer;transition:0.3s;display:flex;align-items:center;gap:12px;
-font-weight:600;color:#9ca3af;
+.logo{
+    font-size:28px;
+    font-weight:800;
+    background:linear-gradient(90deg,#00bfff,#8a2be2);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    margin-bottom:20px;
 }
 
-.menu-item:hover{background:rgba(124,58,237,0.1);color:#c084fc;}
-.menu-item.active{background:#7c3aed;color:white;}
-.menu-icon{font-size:22px;}
+.menu-btn{
+    background:#171722;
+    border:none;
+    color:white;
+    padding:15px;
+    border-radius:14px;
+    cursor:pointer;
+    transition:0.3s;
+    font-size:15px;
+    text-align:left;
+}
 
-.content{flex:1;padding:30px;overflow-y:auto;}
+.menu-btn:hover,
+.menu-btn.active{
+    background:linear-gradient(90deg,#00bfff,#8a2be2);
+    transform:translateX(5px);
+}
 
-.section{display:none;}
-.section.active{display:block;}
+.main{
+    flex:1;
+    overflow-y:auto;
+    padding:25px;
+}
 
-.section-title{font-size:32px;font-weight:800;margin-bottom:30px;background:linear-gradient(90deg,#c084fc,#60a5fa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+}
 
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;}
+.search{
+    width:320px;
+    background:#161621;
+    border:none;
+    padding:14px;
+    border-radius:14px;
+    color:white;
+    outline:none;
+}
+
+.profile-mini{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    background:#161621;
+    padding:10px 15px;
+    border-radius:14px;
+}
+
+.profile-mini img{
+    width:45px;
+    height:45px;
+    border-radius:50%;
+    object-fit:cover;
+}
+
+.cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+    gap:20px;
+    margin-bottom:30px;
+}
 
 .card{
-background:linear-gradient(135deg,rgba(17,24,39,0.98),rgba(2,6,23,0.98));
-border-radius:20px;padding:25px;border:1px solid rgba(255,255,255,0.06);
-transition:0.3s;cursor:pointer;
+    background:#151520;
+    border-radius:22px;
+    padding:22px;
+    border:1px solid rgba(255,255,255,0.06);
 }
 
-.card:hover{transform:translateY(-5px);border-color:#7c3aed;box-shadow:0 10px 30px rgba(124,58,237,0.2);}
-.card h3{font-size:22px;color:#c084fc;margin-bottom:10px;}
-.card p{color:#9ca3af;font-size:14px;line-height:1.6;}
-
-.welcome-box{
-background:linear-gradient(135deg,#7c3aed,#2563eb);
-padding:40px;border-radius:20px;margin-bottom:30px;text-align:center;
+.card h2{
+    font-size:35px;
+    margin-top:10px;
 }
 
-.welcome-box h2{font-size:36px;margin-bottom:10px;}
-.welcome-box p{font-size:18px;opacity:0.9;}
+.section-title{
+    font-size:24px;
+    margin-bottom:18px;
+    font-weight:700;
+}
 
-@media(max-width:768px){
-.sidebar{display:none;}
-.content{padding:20px;}
+.users-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:20px;
+}
+
+.user-card{
+    background:#151520;
+    border-radius:20px;
+    overflow:hidden;
+    border:1px solid rgba(255,255,255,0.05);
+    transition:0.3s;
+}
+
+.user-card:hover{
+    transform:translateY(-5px);
+}
+
+.banner{
+    width:100%;
+    height:100px;
+    object-fit:cover;
+}
+
+.user-info{
+    padding:20px;
+    margin-top:-45px;
+}
+
+.user-info img{
+    width:85px;
+    height:85px;
+    border-radius:50%;
+    border:4px solid #151520;
+    object-fit:cover;
+}
+
+.user-info h3{
+    margin-top:10px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+.verify{
+    color:#00bfff;
+}
+
+.followers{
+    color:#9b9bb2;
+    margin-top:5px;
+    font-size:14px;
+}
+
+.user-actions{
+    display:flex;
+    gap:10px;
+    margin-top:15px;
+}
+
+.user-actions button{
+    flex:1;
+    border:none;
+    padding:12px;
+    border-radius:12px;
+    cursor:pointer;
+    font-weight:600;
+}
+
+.follow-btn{
+    background:linear-gradient(90deg,#00bfff,#8a2be2);
+    color:white;
+}
+
+.block-btn{
+    background:#232331;
+    color:white;
+}
+
+.chat-box{
+    background:#151520;
+    border-radius:20px;
+    padding:20px;
+    margin-top:30px;
+    border:1px solid rgba(255,255,255,0.05);
+}
+
+.chat-messages{
+    height:250px;
+    overflow-y:auto;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    margin-bottom:20px;
+}
+
+.message{
+    background:#1f1f2d;
+    padding:12px 15px;
+    border-radius:14px;
+    width:fit-content;
+    max-width:70%;
+}
+
+.message.you{
+    align-self:flex-end;
+    background:linear-gradient(90deg,#00bfff,#8a2be2);
+}
+
+.chat-input{
+    display:flex;
+    gap:10px;
+}
+
+.chat-input input{
+    flex:1;
+    background:#1d1d2b;
+    border:none;
+    padding:14px;
+    border-radius:14px;
+    color:white;
+    outline:none;
+}
+
+.chat-input button{
+    border:none;
+    padding:14px 20px;
+    border-radius:14px;
+    background:linear-gradient(90deg,#00bfff,#8a2be2);
+    color:white;
+    cursor:pointer;
+    font-weight:600;
+}
+
+.list-box{
+    margin-top:30px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+}
+
+.list{
+    background:#151520;
+    border-radius:20px;
+    padding:20px;
+}
+
+.list ul{
+    list-style:none;
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+}
+
+.list li{
+    background:#1d1d2b;
+    padding:14px;
+    border-radius:14px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.tag{
+    padding:5px 12px;
+    border-radius:999px;
+    font-size:12px;
+    font-weight:600;
+}
+
+.partner{
+    background:#00bfff22;
+    color:#00bfff;
+}
+
+.verified{
+    background:#8a2be222;
+    color:#bb86fc;
+}
+
+.logout{
+    margin-top:auto;
+    background:#ff3b3b !important;
+}
+
+@media(max-width:900px){
+    body{
+        flex-direction:column;
+        overflow:auto;
+    }
+
+    .sidebar{
+        width:100%;
+        flex-direction:row;
+        overflow-x:auto;
+    }
+
+    .list-box{
+        grid-template-columns:1fr;
+    }
+
+    .topbar{
+        flex-direction:column;
+        gap:15px;
+        align-items:flex-start;
+    }
+
+    .search{
+        width:100%;
+    }
 }
 </style>
 </head>
 <body>
 
-<header>
-<div class="logo">NXR</div>
-<div class="user-menu">
-<img src="" alt="Avatar" class="user-avatar" id="userAvatar">
-<button class="btn-logout" onclick="logout()">Sair</button>
-</div>
-</header>
-
-<div class="main-container">
-
 <div class="sidebar">
-<div class="menu-item active" data-section="inicio">
-<span class="menu-icon">🏠</span>
-Início
-</div>
-<div class="menu-item" data-section="chat">
-<span class="menu-icon">💬</span>
-Chat
-</div>
-<div class="menu-item" data-section="perfil">
-<span class="menu-icon">👤</span>
-Perfil
-</div>
-<div class="menu-item" data-section="usuarios">
-<span class="menu-icon">👥</span>
-Usuários
-</div>
-<div class="menu-item" data-section="bloqueados">
-<span class="menu-icon">🚫</span>
-Bloqueados
-</div>
-<div class="menu-item" data-section="config">
-<span class="menu-icon">⚙️</span>
-Configurações
-</div>
+    <div class="logo">NXR</div>
+
+    <button class="menu-btn active">🏠 Dashboard</button>
+    <button class="menu-btn">👥 Usuários</button>
+    <button class="menu-btn">💬 Chat Global</button>
+    <button class="menu-btn">🤝 Parceiros</button>
+    <button class="menu-btn">✔️ Verificados</button>
+    <button class="menu-btn">🚫 Bloqueados</button>
+    <button class="menu-btn">⚙️ Configurações</button>
+
+    <button class="menu-btn logout" onclick="logout()">Sair</button>
 </div>
 
-<div class="content">
+<div class="main">
 
-<div class="section active" id="inicio">
-<div class="welcome-box">
-<h2 id="welcomeName">Bem-vindo!</h2>
-<p>Explore a plataforma e conecte-se com a comunidade</p>
+    <div class="topbar">
+        <input type="text" class="search" placeholder="Pesquisar usuários...">
+
+        <div class="profile-mini">
+            <img src="https://i.imgur.com/8Km9tLL.png">
+            <div>
+                <strong>Juan</strong>
+                <p style="font-size:13px;color:#9b9bb2;">Administrador</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="cards">
+        <div class="card">
+            <p>Usuários</p>
+            <h2>12.847</h2>
+        </div>
+
+        <div class="card">
+            <p>Verificados</p>
+            <h2>542</h2>
+        </div>
+
+        <div class="card">
+            <p>Parceiros</p>
+            <h2>89</h2>
+        </div>
+
+        <div class="card">
+            <p>Mensagens Hoje</p>
+            <h2>24K</h2>
+        </div>
+    </div>
+
+    <h1 class="section-title">Todos os Usuários</h1>
+
+    <div class="users-grid">
+
+        <div class="user-card">
+            <img class="banner" src="https://images.unsplash.com/photo-1503264116251-35a269479413?q=80&w=1200&auto=format&fit=crop">
+
+            <div class="user-info">
+                <img src="https://i.pravatar.cc/150?img=12">
+
+                <h3>
+                    Ghost
+                    <span class="verify">✔</span>
+                </h3>
+
+                <p class="followers">12.4K seguidores</p>
+
+                <div class="user-actions">
+                    <button class="follow-btn">Seguir</button>
+                    <button class="block-btn">Bloquear</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="user-card">
+            <img class="banner" src="https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=1200&auto=format&fit=crop">
+
+            <div class="user-info">
+                <img src="https://i.pravatar.cc/150?img=25">
+
+                <h3>
+                    Raven
+                    <span class="verify">🛡</span>
+                </h3>
+
+                <p class="followers">8.2K seguidores</p>
+
+                <div class="user-actions">
+                    <button class="follow-btn">Seguir</button>
+                    <button class="block-btn">Bloquear</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="user-card">
+            <img class="banner" src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=1200&auto=format&fit=crop">
+
+            <div class="user-info">
+                <img src="https://i.pravatar.cc/150?img=44">
+
+                <h3>
+                    ShadowX
+                </h3>
+
+                <p class="followers">4.1K seguidores</p>
+
+                <div class="user-actions">
+                    <button class="follow-btn">Seguir</button>
+                    <button class="block-btn">Bloquear</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="chat-box">
+        <h1 class="section-title">Chat Global</h1>
+
+        <div class="chat-messages" id="chatMessages">
+            <div class="message">Ghost: Salve rapaziada 🔥</div>
+            <div class="message">Raven: Novo update da NXR ficou insano.</div>
+            <div class="message you">Você: Bora crescer a comunidade 🚀</div>
+        </div>
+
+        <div class="chat-input">
+            <input type="text" id="messageInput" placeholder="Digite uma mensagem...">
+            <button onclick="sendMessage()">Enviar</button>
+        </div>
+    </div>
+
+    <div class="list-box">
+
+        <div class="list">
+            <h1 class="section-title">Parceiros</h1>
+
+            <ul>
+                <li>
+                    NXR Hosting
+                    <span class="tag partner">Parceiro</span>
+                </li>
+
+                <li>
+                    Dark Studios
+                    <span class="tag partner">Parceiro</span>
+                </li>
+
+                <li>
+                    Shadow Company
+                    <span class="tag partner">Parceiro</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="list">
+            <h1 class="section-title">Usuários Verificados</h1>
+
+            <ul>
+                <li>
+                    Ghost
+                    <span class="tag verified">Verificado</span>
+                </li>
+
+                <li>
+                    Raven
+                    <span class="tag verified">Verificado</span>
+                </li>
+
+                <li>
+                    Frost
+                    <span class="tag verified">Verificado</span>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+
+    <div class="list" style="margin-top:30px;">
+        <h1 class="section-title">Usuários Bloqueados</h1>
+
+        <ul>
+            <li>
+                ToxicUser123
+                <button class="block-btn" style="padding:8px 15px;">Desbloquear</button>
+            </li>
+
+            <li>
+                FakeAccount
+                <button class="block-btn" style="padding:8px 15px;">Desbloquear</button>
+            </li>
+        </ul>
+    </div>
+
 </div>
 
-<h3 class="section-title">Recursos Principais</h3>
-<div class="cards">
-<div class="card" onclick="showSection('chat')">
-<h3>💬 Chat</h3>
-<p>Converse em tempo real com seus contatos</p>
-</div>
-<div class="card" onclick="showSection('perfil')">
-<h3>👤 Perfil</h3>
-<p>Personalize seu perfil e bio</p>
-</div>
-<div class="card" onclick="showSection('usuarios')">
-<h3>👥 Usuários</h3>
-<p>Explore e conecte-se com outros usuários</p>
-</div>
-<div class="card" onclick="showSection('config')">
-<h3>⚙️ Configurações</h3>
-<p>Ajuste suas preferências de conta</p>
-</div>
-</div>
-</div>
-
-<div class="section" id="chat">
-<h3 class="section-title">Chat</h3>
-<p style="color:#9ca3af;">Sistema de chat em desenvolvimento. Em breve você poderá conversar com outros usuários!</p>
-</div>
-
-<div class="section" id="perfil">
-<h3 class="section-title">Perfil</h3>
-<p style="color:#9ca3af;">Configure seu perfil aqui.</p>
-</div>
-
-<div class="section" id="usuarios">
-<h3 class="section-title">Usuários</h3>
-<div id="usersList"></div>
-</div>
-
-<div class="section" id="bloqueados">
-<h3 class="section-title">Usuários Bloqueados</h3>
-<div id="blockedList"></div>
-</div>
-
-<div class="section" id="config">
-<h3 class="section-title">Configurações</h3>
-<p style="color:#9ca3af;">Configurações da conta.</p>
-</div>
-
-</div>
-
-</div>
-
+<!-- Firebase -->
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import {getAuth,onAuthStateChanged,signOut} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import {getFirestore,doc,getDoc} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+import { getAuth, signOut } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 
 const firebaseConfig = {
 apiKey: "AIzaSyDmuDzQBWi9G1DculuOy69v3BH0ulhUwcM",
@@ -187,40 +550,70 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-onAuthStateChanged(auth, async (user) => {
-if(!user){
-window.location.href = "login.html";
-return;
+// CHAT GLOBAL FIREBASE
+const chatMessages = document.getElementById('chatMessages');
+const messageInput = document.getElementById('messageInput');
+
+window.sendMessage = async function(){
+    if(messageInput.value.trim() !== ''){
+        await addDoc(collection(db, 'chatGlobal'), {
+            user: 'Você',
+            text: messageInput.value,
+            createdAt: Date.now()
+        });
+
+        messageInput.value = '';
+    }
 }
 
-const ref = doc(db,"usuarios",user.uid);
-const snap = await getDoc(ref);
+const q = query(collection(db, 'chatGlobal'), orderBy('createdAt'));
 
-if(snap.exists()){
-const data = snap.data();
-document.getElementById('welcomeName').textContent = `Bem-vindo, ${data.nome}!`;
-document.getElementById('userAvatar').src = data.foto || 'https://via.placeholder.com/45';
-}
+onSnapshot(q, (snapshot) => {
+    chatMessages.innerHTML = '';
+
+    snapshot.forEach((doc) => {
+        const data = doc.data();
+
+        const msg = document.createElement('div');
+        msg.classList.add('message');
+
+        if(data.user === 'Você'){
+            msg.classList.add('you');
+        }
+
+        msg.innerText = `${data.user}: ${data.text}`;
+        chatMessages.appendChild(msg);
+    });
+
+    chatMessages.scrollTop = chatMessages.scrollHeight;
 });
 
-window.logout = async () => {
-await signOut(auth);
-window.location.href = "login.html";
+window.logout = async function(){
+    await signOut(auth);
+    window.location.href = 'login.html';
+}
+</script>
+
+<script>
+function sendMessage(){
+    const input = document.getElementById('messageInput');
+    const messages = document.getElementById('chatMessages');
+
+    if(input.value.trim() !== ''){
+        const msg = document.createElement('div');
+        msg.classList.add('message','you');
+        msg.innerText = 'Você: ' + input.value;
+
+        messages.appendChild(msg);
+        messages.scrollTop = messages.scrollHeight;
+
+        input.value = '';
+    }
 }
 
-window.showSection = (section) => {
-document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
-document.getElementById(section).classList.add('active');
-document.querySelector(`[data-section="${section}"]`).classList.add('active');
+function logout(){
+    window.location.href = 'login.html';
 }
-
-document.querySelectorAll('.menu-item').forEach(item => {
-item.addEventListener('click', () => {
-const section = item.dataset.section;
-showSection(section);
-});
-});
 </script>
 
 </body>
