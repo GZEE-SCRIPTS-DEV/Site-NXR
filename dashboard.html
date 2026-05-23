@@ -3,462 +3,125 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>NXR Dashboard</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
 <style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Poppins,sans-serif;
-}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins,sans-serif;}
+body{background:#0b0f19;color:white;display:flex;min-height:100vh;overflow:hidden;}
 
-body{
-background:#0b0f19;
-color:white;
-display:flex;
-min-height:100vh;
-overflow:hidden;
-}
-
-.sidebar{
-width:260px;
-background:#111827;
-padding:20px;
-display:flex;
-flex-direction:column;
-border-right:1px solid rgba(255,255,255,0.05);
-}
-
-.logo{
-font-size:32px;
-font-weight:800;
-color:#a855f7;
-margin-bottom:40px;
-}
+.sidebar{width:260px;background:#111827;padding:20px;display:flex;flex-direction:column;border-right:1px solid rgba(255,255,255,0.05);}
+.logo{font-size:32px;font-weight:800;color:#a855f7;margin-bottom:40px;}
 
 .sidebar button{
-width:100%;
-padding:15px;
-margin-bottom:12px;
-border:none;
-border-radius:14px;
-background:#1f2937;
-color:white;
-font-size:15px;
-font-weight:700;
-cursor:pointer;
-transition:.2s;
-text-align:left;
+width:100%;padding:15px;margin-bottom:12px;border:none;border-radius:14px;
+background:#1f2937;color:white;font-size:15px;font-weight:700;cursor:pointer;
+transition:.2s;text-align:left;
 }
+.sidebar button:hover{background:#7c3aed;transform:translateX(4px);}
+.sidebar button.active{background:#7c3aed;}
 
-.sidebar button:hover{
-background:#7c3aed;
-transform:translateX(4px);
-}
-
-.sidebar button.active{
-background:#7c3aed;
-}
-
-.main{
-flex:1;
-overflow-y:auto;
-height:100vh;
-}
+.main{flex:1;overflow-y:auto;height:100vh;}
 
 .header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:20px;
-background:#111827;
-border-bottom:1px solid rgba(255,255,255,0.05);
-position:sticky;
-top:0;
-z-index:999;
-}
-
-.header h1{
-font-size:28px;
+display:flex;justify-content:space-between;align-items:center;padding:20px;
+background:#111827;border-bottom:1px solid rgba(255,255,255,0.05);
+position:sticky;top:0;z-index:999;
 }
 
 .profile-btn{
-padding:12px 18px;
-border:none;
-border-radius:12px;
-background:#7c3aed;
-color:white;
-font-weight:700;
-cursor:pointer;
+padding:12px 18px;border:none;border-radius:12px;background:#7c3aed;
+color:white;font-weight:700;cursor:pointer;
 }
 
-.section{
-display:none;
-padding:20px;
-}
+.section{display:none;padding:20px;}
+.section.active{display:block;}
 
-.section.active{
-display:block;
-}
-
-.users-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-gap:20px;
-}
+.users-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;}
 
 .user-card{
-background:#111827;
-padding:20px;
-border-radius:20px;
-cursor:pointer;
-transition:.2s;
-border:1px solid rgba(255,255,255,0.05);
+background:#111827;padding:20px;border-radius:20px;cursor:pointer;
+transition:.2s;border:1px solid rgba(255,255,255,0.05);
 }
-
-.user-card:hover{
-transform:translateY(-4px);
-}
-
-.user-banner{
-width:100%;
-height:120px;
-border-radius:14px;
-object-fit:cover;
-}
-
-.user-photo{
-width:90px;
-height:90px;
-border-radius:50%;
-margin-top:-45px;
-border:5px solid #111827;
-object-fit:cover;
-background:#222;
-}
-
-.user-name{
-margin-top:10px;
-font-size:22px;
-font-weight:700;
-display:flex;
-align-items:center;
-gap:6px;
-}
-
-.user-user{
-color:#9ca3af;
-margin-top:4px;
-}
-
-.user-stats{
-display:flex;
-gap:20px;
-margin-top:15px;
-}
+.user-card:hover{transform:translateY(-4px);}
+.user-banner{width:100%;height:120px;border-radius:14px;object-fit:cover;}
+.user-photo{width:90px;height:90px;border-radius:50%;margin-top:-45px;border:5px solid #111827;object-fit:cover;background:#222;}
+.user-name{margin-top:10px;font-size:22px;font-weight:700;display:flex;align-items:center;gap:6px;}
+.user-user{color:#9ca3af;margin-top:4px;}
+.user-stats{display:flex;gap:20px;margin-top:15px;}
 
 .verified{
-width:18px;
-height:18px;
-border-radius:50%;
-background:#3b82f6;
-display:inline-flex;
-align-items:center;
-justify-content:center;
-font-size:11px;
-color:white;
-font-weight:800;
+width:18px;height:18px;border-radius:50%;background:#3b82f6;
+display:inline-flex;align-items:center;justify-content:center;font-size:11px;color:white;
 }
 
 .beta{
-width:18px;
-height:18px;
-border-radius:50%;
-background:#f59e0b;
-display:inline-flex;
-align-items:center;
-justify-content:center;
-font-size:11px;
-color:white;
-font-weight:800;
+width:18px;height:18px;border-radius:50%;background:#f59e0b;
+display:inline-flex;align-items:center;justify-content:center;font-size:11px;color:white;
 }
 
 .create-post{
-background:#111827;
-padding:20px;
-border-radius:20px;
-display:flex;
-flex-direction:column;
-gap:12px;
-margin-bottom:20px;
+background:#111827;padding:20px;border-radius:20px;display:flex;
+flex-direction:column;gap:12px;margin-bottom:20px;
 }
 
-.create-post textarea,
-.create-post input{
-background:#0f172a;
-border:none;
-padding:15px;
-border-radius:14px;
-color:white;
-outline:none;
+.create-post textarea,.create-post input{
+background:#0f172a;border:none;padding:15px;border-radius:14px;color:white;outline:none;
 }
 
 .create-post button{
-padding:15px;
-border:none;
-border-radius:14px;
-background:#7c3aed;
-color:white;
-font-weight:700;
-cursor:pointer;
+padding:15px;border:none;border-radius:14px;background:#7c3aed;
+color:white;font-weight:700;cursor:pointer;
 }
 
 .post{
-background:#111827;
-border-radius:20px;
-overflow:hidden;
-margin-bottom:20px;
+background:#111827;border-radius:20px;overflow:hidden;margin-bottom:20px;
 border:1px solid rgba(255,255,255,0.05);
 }
 
-.post-header{
-display:flex;
-align-items:center;
-gap:12px;
-padding:15px;
-cursor:pointer;
-}
+.post-header{display:flex;align-items:center;gap:12px;padding:15px;cursor:pointer;}
+.post-photo{width:55px;height:55px;border-radius:50%;object-fit:cover;}
+.post-user-name{display:flex;align-items:center;gap:6px;font-weight:800;}
+.post-media{width:100%;max-height:600px;object-fit:cover;background:black;}
+.post-caption{padding:15px;color:#d1d5db;}
 
-.post-photo{
-width:55px;
-height:55px;
-border-radius:50%;
-object-fit:cover;
-}
-
-.post-media{
-width:100%;
-max-height:600px;
-object-fit:cover;
-background:black;
-}
-
-.post-caption{
-padding:15px;
-color:#d1d5db;
-}
-
-.post-actions{
-display:flex;
-gap:10px;
-padding:15px;
-}
-
+.post-actions{display:flex;gap:10px;padding:15px;}
 .post-actions button{
-flex:1;
-padding:14px;
-border:none;
-border-radius:14px;
-background:#0f172a;
-color:white;
-font-weight:700;
-cursor:pointer;
+flex:1;padding:14px;border:none;border-radius:14px;background:#0f172a;
+color:white;font-weight:700;cursor:pointer;
 }
 
-.post-user-name{
-display:flex;
-align-items:center;
-gap:6px;
-font-weight:800;
-}
+.chat-box{background:#111827;height:70vh;border-radius:20px;padding:20px;overflow-y:auto;}
+.chat-message{background:#0f172a;padding:12px;border-radius:14px;margin-bottom:12px;display:flex;gap:10px;}
+.chat-message img{width:40px;height:40px;border-radius:50%;object-fit:cover;}
+.chat-name{font-weight:800;display:flex;gap:5px;align-items:center;}
+.chat-text{color:#d1d5db;margin-top:4px;}
 
-.chat-box{
-background:#111827;
-height:70vh;
-border-radius:20px;
-padding:20px;
-overflow-y:auto;
-}
+.chat-send{display:flex;gap:10px;margin-top:15px;}
+.chat-send input{flex:1;padding:15px;border:none;border-radius:14px;background:#111827;color:white;outline:none;}
+.chat-send button{padding:15px 20px;border:none;border-radius:14px;background:#7c3aed;color:white;font-weight:700;cursor:pointer;}
 
-.chat-message{
-background:#0f172a;
-padding:12px;
-border-radius:14px;
-margin-bottom:12px;
-display:flex;
-gap:10px;
-align-items:flex-start;
-}
-
-.chat-message img{
-width:40px;
-height:40px;
-border-radius:50%;
-object-fit:cover;
-background:#222;
-}
-
-.chat-name{
-font-weight:800;
-display:flex;
-align-items:center;
-gap:5px;
-}
-
-.chat-text{
-color:#d1d5db;
-margin-top:4px;
-word-break:break-word;
-}
-
-.chat-send{
-display:flex;
-gap:10px;
-margin-top:15px;
-}
-
-.chat-send input{
-flex:1;
-padding:15px;
-border:none;
-border-radius:14px;
-background:#111827;
-color:white;
-outline:none;
-}
-
-.chat-send button{
-padding:15px 20px;
-border:none;
-border-radius:14px;
-background:#7c3aed;
-color:white;
-font-weight:700;
-cursor:pointer;
-}
-
-.profile-card{
-background:#111827;
-border-radius:20px;
-overflow:hidden;
-}
-
-.profile-banner{
-width:100%;
-height:250px;
-object-fit:cover;
-}
-
-.profile-content{
-padding:20px;
-text-align:center;
-}
-
-.profile-photo{
-width:120px;
-height:120px;
-border-radius:50%;
-margin-top:-70px;
-border:5px solid #111827;
-object-fit:cover;
-background:#222;
-}
-
-.profile-name{
-font-size:30px;
-font-weight:800;
-margin-top:10px;
-display:flex;
-align-items:center;
-justify-content:center;
-gap:6px;
-}
-
-.profile-user{
-color:#9ca3af;
-margin-top:4px;
-}
-
-.profile-stats{
-display:flex;
-justify-content:center;
-gap:40px;
-margin-top:20px;
-}
-
-.profile-stats div{
-text-align:center;
-}
-
-.profile-stats b{
-font-size:22px;
-}
-
-.profile-edit{
-margin-top:20px;
-padding:14px 20px;
-border:none;
-border-radius:14px;
-background:#7c3aed;
-color:white;
-font-weight:700;
-cursor:pointer;
-}
+.profile-card{background:#111827;border-radius:20px;overflow:hidden;}
+.profile-banner{width:100%;height:250px;object-fit:cover;}
+.profile-content{padding:20px;text-align:center;}
+.profile-photo{width:120px;height:120px;border-radius:50%;margin-top:-70px;border:5px solid #111827;object-fit:cover;background:#222;}
+.profile-name{font-size:30px;font-weight:800;margin-top:10px;display:flex;justify-content:center;align-items:center;gap:6px;}
+.profile-user{color:#9ca3af;margin-top:4px;}
+.profile-stats{display:flex;justify-content:center;gap:40px;margin-top:20px;}
+.profile-stats div{text-align:center;}
+.profile-stats b{font-size:22px;}
+.profile-edit{margin-top:20px;padding:14px 20px;border:none;border-radius:14px;background:#7c3aed;color:white;font-weight:700;cursor:pointer;}
 
 @media screen and (max-width:900px){
-body{
-flex-direction:column;
-overflow:auto;
-}
-
-.sidebar{
-width:100%;
-height:auto;
-flex-direction:row;
-overflow-x:auto;
-padding:12px;
-gap:10px;
-border-right:none;
-border-bottom:1px solid rgba(255,255,255,0.05);
-position:sticky;
-top:0;
-z-index:999;
-}
-
-.logo{
-display:none;
-}
-
-.sidebar button{
-min-width:170px;
-margin-bottom:0;
-text-align:center;
-}
-
-.main{
-height:auto;
-overflow:visible;
-}
-
-.users-grid{
-grid-template-columns:1fr;
-}
-
-.chat-send{
-flex-direction:column;
-}
-
-.post-actions{
-flex-direction:column;
-}
-
-.profile-stats{
-gap:20px;
-}
+body{flex-direction:column;overflow:auto;}
+.sidebar{width:100%;height:auto;flex-direction:row;overflow-x:auto;padding:12px;gap:10px;border-right:none;border-bottom:1px solid rgba(255,255,255,0.05);position:sticky;top:0;z-index:999;}
+.logo{display:none;}
+.sidebar button{min-width:170px;margin-bottom:0;text-align:center;}
+.main{height:auto;overflow:visible;}
+.users-grid{grid-template-columns:1fr;}
+.chat-send{flex-direction:column;}
+.post-actions{flex-direction:column;}
 }
 </style>
 </head>
@@ -467,7 +130,6 @@ gap:20px;
 
 <div class="sidebar">
 <div class="logo">NXR</div>
-
 <button class="menu-btn active" data-section="dashboard">🏠 Dashboard</button>
 <button class="menu-btn" data-section="usuarios">👥 Usuários</button>
 <button class="menu-btn" data-section="feed">📸 Feed</button>
@@ -485,7 +147,7 @@ gap:20px;
 <div class="section active" id="dashboard-section">
 <h2>Bem-vindo à NXR</h2>
 <br>
-<p>Sistema completo com usuários, feed, chat e perfis.</p>
+<p>NXR é uma plataforma social moderna que reúne diversas formas de interação em um só lugar. Os usuários podem compartilhar conteúdos através do feed, conversar em tempo real no chat global, participar de grupos parceiros para fortalecer conexões com comunidades aliadas e explorar a aba de usuários, onde é possível conhecer perfis, acompanhar atividades e interagir com outros membros. Tudo isso em um ambiente focado em comunidade, conectividade e experiência social. 🚀💜.</p>
 </div>
 
 <div class="section" id="usuarios-section">
@@ -505,7 +167,6 @@ gap:20px;
 
 <div class="section" id="chat-section">
 <div class="chat-box" id="chatMessages"></div>
-
 <div class="chat-send">
 <input type="text" id="chatInput" placeholder="Digite sua mensagem">
 <button onclick="enviarMensagem()">Enviar</button>
@@ -514,30 +175,19 @@ gap:20px;
 
 <div class="section" id="perfil-section">
 <div class="profile-card">
-
 <img id="perfilBanner" class="profile-banner" src="https://picsum.photos/1200/300">
 
 <div class="profile-content">
 <img id="perfilFoto" class="profile-photo" src="https://cdn-icons-png.flaticon.com/512/149/149071.png">
-
 <div class="profile-name" id="perfilNome">Usuário</div>
-
 <div class="profile-user" id="perfilUser">@user</div>
 
 <div class="profile-stats">
-<div>
-<b id="seguidores">0</b>
-<p>Seguidores</p>
-</div>
-
-<div>
-<b id="seguindo">0</b>
-<p>Seguindo</p>
-</div>
+<div><b id="seguidores">0</b><p>Seguidores</p></div>
+<div><b id="seguindo">0</b><p>Seguindo</p></div>
 </div>
 
 <button class="profile-edit" onclick="window.location.href='perfil.html'">Editar Perfil</button>
-
 </div>
 </div>
 </div>
@@ -556,7 +206,8 @@ query,
 orderBy,
 doc,
 getDoc,
-onSnapshot
+onSnapshot,
+updateDoc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 import {
@@ -617,7 +268,6 @@ const uid = docSnap.id;
 div.innerHTML += `
 <div class="user-card" onclick="window.location.href='perfil.html?uid=${uid}'">
 <img class="user-banner" src="${u.banner || 'https://picsum.photos/500/200'}">
-
 <img class="user-photo" src="${u.foto || avatarPadrao(u.nome)}">
 
 <div class="user-name">
@@ -629,15 +279,8 @@ ${seloBeta(u)}
 <div class="user-user">@${u.usuario || "user"}</div>
 
 <div class="user-stats">
-<div>
-<b>${(u.seguidores || []).length}</b>
-<p>Seguidores</p>
-</div>
-
-<div>
-<b>${(u.seguindo || []).length}</b>
-<p>Seguindo</p>
-</div>
+<div><b>${(u.seguidores || []).length}</b><p>Seguidores</p></div>
+<div><b>${(u.seguindo || []).length}</b><p>Seguindo</p></div>
 </div>
 </div>
 `;
@@ -655,7 +298,8 @@ alert("Cole o link da imagem ou vídeo.");
 return;
 }
 
-const tipo = media.includes(".mp4") || media.includes(".webm") || media.includes(".mov")
+const tipo =
+media.includes(".mp4") || media.includes(".webm") || media.includes(".mov")
 ? "video"
 : "imagem";
 
@@ -665,7 +309,8 @@ legenda,
 media,
 tipo,
 timestamp:Date.now(),
-likes:[]
+likes:[],
+comentarios:[]
 });
 
 document.getElementById("caption").value = "";
@@ -683,9 +328,14 @@ const snap = await getDocs(q);
 
 for(const docSnap of snap.docs){
 const p = docSnap.data();
+const postId = docSnap.id;
 
 const userSnap = await getDoc(doc(db,"usuarios",p.uid));
 const u = userSnap.exists() ? userSnap.data() : {};
+
+const likes = p.likes || [];
+const comentarios = p.comentarios || [];
+const curtiu = likes.includes(me);
 
 feed.innerHTML += `
 <div class="post">
@@ -699,10 +349,7 @@ ${u.nome || "Usuário"}
 ${seloVerificado(u)}
 ${seloBeta(u)}
 </div>
-
-<div style="color:#9ca3af;">
-@${u.usuario || "user"}
-</div>
+<div style="color:#9ca3af;">@${u.usuario || "user"}</div>
 </div>
 </div>
 
@@ -712,13 +359,16 @@ p.tipo === "video"
 : `<img class="post-media" src="${p.media}">`
 }
 
-<div class="post-caption">
-${p.legenda || ""}
-</div>
+<div class="post-caption">${p.legenda || ""}</div>
 
 <div class="post-actions">
-<button>❤️ ${(p.likes || []).length}</button>
-<button>💬 Comentários</button>
+<button onclick="curtirPost('${postId}')">
+${curtiu ? "❤️ Curtido" : "🤍 Curtir"} (${likes.length})
+</button>
+
+<button onclick="abrirComentario('${postId}')">
+💬 Comentários (${comentarios.length})
+</button>
 </div>
 
 </div>
@@ -726,12 +376,60 @@ ${p.legenda || ""}
 }
 }
 
+window.curtirPost = async(postId)=>{
+const refPost = doc(db,"posts",postId);
+const snap = await getDoc(refPost);
+
+if(!snap.exists()) return;
+
+const post = snap.data();
+let likes = post.likes || [];
+
+if(likes.includes(me)){
+likes = likes.filter(id => id !== me);
+}else{
+likes.push(me);
+}
+
+await updateDoc(refPost,{likes});
+await loadFeed();
+};
+
+window.abrirComentario = async(postId)=>{
+const texto = prompt("Digite seu comentário:");
+
+if(!texto || !texto.trim()) return;
+
+const refPost = doc(db,"posts",postId);
+const snap = await getDoc(refPost);
+
+if(!snap.exists()) return;
+
+const post = snap.data();
+const comentarios = post.comentarios || [];
+
+const userSnap = await getDoc(doc(db,"usuarios",me));
+const u = userSnap.exists() ? userSnap.data() : {};
+
+comentarios.push({
+uid:me,
+nome:u.nome || "Usuário",
+foto:u.foto || "",
+verificado:u.verificado || false,
+betaTester:u.betaTester || false,
+texto:texto.trim(),
+data:Date.now()
+});
+
+await updateDoc(refPost,{comentarios});
+await loadFeed();
+};
+
 function loadChat(){
 if(chatStarted) return;
 chatStarted = true;
 
 const div = document.getElementById("chatMessages");
-
 const q = query(collection(db,"chat"), orderBy("timestamp","asc"));
 
 onSnapshot(q,(snapshot)=>{
@@ -775,7 +473,7 @@ nome:u.nome || "Usuário",
 foto:u.foto || "",
 verificado:u.verificado || false,
 betaTester:u.betaTester || false,
-texto:texto,
+texto,
 timestamp:Date.now()
 });
 
