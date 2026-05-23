@@ -2,10 +2,8 @@
 <html lang="pt-BR">
 
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>NXR Dashboard</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -13,7 +11,6 @@
 <style>
 
 /* RESET */
-
 *{
 margin:0;
 padding:0;
@@ -30,7 +27,6 @@ overflow:hidden;
 }
 
 /* SIDEBAR */
-
 .sidebar{
 width:260px;
 background:#111827;
@@ -72,7 +68,6 @@ background:#7c3aed;
 }
 
 /* MAIN */
-
 .main{
 flex:1;
 overflow-y:auto;
@@ -80,7 +75,6 @@ height:100vh;
 }
 
 /* HEADER */
-
 .header{
 display:flex;
 justify-content:space-between;
@@ -108,7 +102,6 @@ cursor:pointer;
 }
 
 /* SECTIONS */
-
 .section{
 display:none;
 padding:20px;
@@ -119,7 +112,6 @@ display:block;
 }
 
 /* USERS */
-
 .users-grid{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
@@ -153,7 +145,6 @@ border-radius:50%;
 margin-top:-45px;
 border:5px solid #111827;
 object-fit:cover;
-background:#222;
 }
 
 .user-name{
@@ -177,7 +168,6 @@ margin-top:15px;
 }
 
 /* BADGES */
-
 .verified{
 width:18px;
 height:18px;
@@ -201,7 +191,6 @@ font-size:11px;
 }
 
 /* FEED */
-
 .create-post{
 background:#111827;
 padding:20px;
@@ -258,7 +247,6 @@ object-fit:cover;
 width:100%;
 max-height:600px;
 object-fit:cover;
-background:black;
 }
 
 .post-caption{
@@ -284,7 +272,6 @@ cursor:pointer;
 }
 
 /* CHAT */
-
 .chat-box{
 background:#111827;
 height:70vh;
@@ -327,7 +314,6 @@ cursor:pointer;
 }
 
 /* PROFILE */
-
 .profile-card{
 background:#111827;
 border-radius:20px;
@@ -351,8 +337,6 @@ height:120px;
 border-radius:50%;
 margin-top:-70px;
 border:5px solid #111827;
-object-fit:cover;
-background:#222;
 }
 
 .profile-name{
@@ -373,14 +357,6 @@ gap:40px;
 margin-top:20px;
 }
 
-.profile-stats div{
-text-align:center;
-}
-
-.profile-stats b{
-font-size:22px;
-}
-
 .profile-edit{
 margin-top:20px;
 padding:14px 20px;
@@ -393,633 +369,267 @@ cursor:pointer;
 }
 
 /* RESPONSIVO */
-
-@media screen and (max-width:900px){
-
-body{
-flex-direction:column;
-overflow:auto;
-}
-
-.sidebar{
-width:100%;
-height:auto;
-flex-direction:row;
-overflow-x:auto;
-padding:12px;
-gap:10px;
-border-right:none;
-border-bottom:1px solid rgba(255,255,255,0.05);
-position:sticky;
-top:0;
-z-index:999;
-}
-
-.logo{
-display:none;
-}
-
-.sidebar button{
-min-width:170px;
-margin-bottom:0;
-text-align:center;
-}
-
-.main{
-height:auto;
-overflow:visible;
-}
-
-.users-grid{
-grid-template-columns:1fr;
-}
-
-.chat-send{
-flex-direction:column;
-}
-
-.post-actions{
-flex-direction:column;
-}
-
-.profile-stats{
-gap:20px;
-}
-
+@media(max-width:900px){
+body{flex-direction:column;overflow:auto;}
+.sidebar{width:100%;flex-direction:row;overflow-x:auto;}
+.logo{display:none;}
+.sidebar button{min-width:170px;text-align:center;}
+.main{height:auto;}
+.users-grid{grid-template-columns:1fr;}
+.chat-send{flex-direction:column;}
 }
 
 </style>
-
 </head>
 
 <body>
 
-<!-- SIDEBAR -->
-
 <div class="sidebar">
-
 <div class="logo">NXR</div>
 
-<button class="menu-btn active" data-section="dashboard">
-🏠 Dashboard
-</button>
-
-<button class="menu-btn" data-section="usuarios">
-👥 Usuários
-</button>
-
-<button class="menu-btn" data-section="feed">
-📸 Feed
-</button>
-
-<button class="menu-btn" data-section="chat">
-💬 Chat Global
-</button>
-
-<button class="menu-btn" data-section="perfil">
-⚙️ Perfil
-</button>
+<button class="menu-btn active" data-section="dashboard">🏠 Dashboard</button>
+<button class="menu-btn" data-section="usuarios">👥 Usuários</button>
+<button class="menu-btn" data-section="feed">📸 Feed</button>
+<button class="menu-btn" data-section="chat">💬 Chat Global</button>
+<button class="menu-btn" data-section="perfil">⚙️ Perfil</button>
 
 </div>
-
-<!-- MAIN -->
 
 <div class="main">
 
 <div class="header">
-
 <h1>NXR Dashboard</h1>
 
-<button
-class="profile-btn"
-onclick="window.location.href='perfil.html'">
+<button class="profile-btn" onclick="window.location.href='perfil.html'">
 Meu Perfil
 </button>
-
 </div>
 
 <!-- DASHBOARD -->
-
 <div class="section active" id="dashboard-section">
-
 <h2>Bem-vindo à NXR</h2>
-
-<br>
-
-<p>
-Sistema completo com usuários,
-feed, chat e perfis.
-</p>
-
+<p>Sistema completo com usuários, feed e chat.</p>
 </div>
 
 <!-- USERS -->
-
 <div class="section" id="usuarios-section">
-
 <h2>Usuários</h2>
-
-<br>
-
 <div class="users-grid" id="users"></div>
-
 </div>
 
 <!-- FEED -->
-
 <div class="section" id="feed-section">
-
 <div class="create-post">
-
-<textarea
-id="caption"
-placeholder="O que você quer postar?"></textarea>
-
-<input
-type="text"
-id="media"
-placeholder="Cole o link da imagem ou vídeo">
-
-<button onclick="criarPost()">
-Postar
-</button>
-
+<textarea id="caption" placeholder="O que você quer postar?"></textarea>
+<input id="media" placeholder="Link da mídia">
+<button onclick="criarPost()">Postar</button>
 </div>
 
 <div id="feed"></div>
-
 </div>
 
 <!-- CHAT -->
-
 <div class="section" id="chat-section">
-
 <div class="chat-box" id="chatMessages"></div>
 
 <div class="chat-send">
-
-<input
-type="text"
-id="chatInput"
-placeholder="Digite sua mensagem">
-
-<button onclick="enviarMensagem()">
-Enviar
-</button>
-
+<input id="chatInput" placeholder="Mensagem">
+<button onclick="enviarMensagem()">Enviar</button>
 </div>
-
 </div>
 
 <!-- PERFIL -->
-
 <div class="section" id="perfil-section">
-
 <div class="profile-card">
 
-<img
-id="perfilBanner"
-class="profile-banner"
-src="https://picsum.photos/1200/300">
-
+<img id="perfilBanner" class="profile-banner">
 <div class="profile-content">
 
-<img
-id="perfilFoto"
-class="profile-photo"
-src="https://cdn-icons-png.flaticon.com/512/149/149071.png">
+<img id="perfilFoto" class="profile-photo">
 
-<div
-class="profile-name"
-id="perfilNome">
-Usuário
-</div>
-
-<div
-class="profile-user"
-id="perfilUser">
-@user
-</div>
+<div id="perfilNome" class="profile-name"></div>
+<div id="perfilUser" class="profile-user"></div>
 
 <div class="profile-stats">
-
-<div>
-<b id="seguidores">0</b>
-<p>Seguidores</p>
+<div><b id="seguidores">0</b><p>Seguidores</p></div>
+<div><b id="seguindo">0</b><p>Seguindo</p></div>
 </div>
 
-<div>
-<b id="seguindo">0</b>
-<p>Seguindo</p>
-</div>
+<button class="profile-edit">Editar Perfil</button>
 
 </div>
-
-<button
-class="profile-edit"
-onclick="window.location.href='editarperfil.html'">
-Editar Perfil
-</button>
-
 </div>
-
-</div>
-
 </div>
 
 </div>
 
 <script type="module">
 
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
-getFirestore,
-collection,
-getDocs,
-addDoc,
-query,
-orderBy,
-doc,
-getDoc,
-onSnapshot
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+getFirestore, collection, getDocs, addDoc, query, orderBy, doc, getDoc, onSnapshot
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-import {
-getAuth,
-onAuthStateChanged
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-/* FIREBASE */
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const firebaseConfig = {
-
 apiKey: "AIzaSyDmuDzQBWi9G1DculuOy69v3BH0ulhUwcM",
 authDomain: "siteoficialgzee.firebaseapp.com",
 projectId: "siteoficialgzee",
 storageBucket: "siteoficialgzee.firebasestorage.app",
 messagingSenderId: "927527396643",
 appId: "1:927527396643:web:e1de375c6994d351995896"
-
 };
 
 const app = initializeApp(firebaseConfig);
-
 const db = getFirestore(app);
-
 const auth = getAuth(app);
 
 let me = null;
 
-/* LOGIN */
-
-onAuthStateChanged(auth, async(user)=>{
-
+onAuthStateChanged(auth,(user)=>{
 if(user){
-
 me = user.uid;
-
 loadUsers();
-
 loadFeed();
-
 loadChat();
-
 loadPerfil();
-
 }else{
-
-window.location.href = "login.html";
-
+window.location.href="login.html";
 }
-
 });
 
 /* USERS */
-
 async function loadUsers(){
+const div = document.getElementById("users");
+div.innerHTML="";
 
-const div =
-document.getElementById("users");
+const snap = await getDocs(collection(db,"usuarios"));
 
-div.innerHTML = "";
-
-const snap =
-await getDocs(collection(db,"usuarios"));
-
-snap.forEach(docSnap=>{
-
-const u = docSnap.data();
-
-const uid = docSnap.id;
+snap.forEach(d=>{
+const u = d.data();
 
 div.innerHTML += `
-
-<div
-class="user-card"
-onclick="window.location.href='perfil.html?uid=${uid}'">
-
-<img
-class="user-banner"
-src="${u.banner || 'https://picsum.photos/500/200'}">
-
-<img
-class="user-photo"
-src="${u.foto || 'https://cdn-icons-png.flaticon.com/512/149/149071.png'}">
-
-<div class="user-name">
-
-${u.nome || 'Usuário'}
-
-${u.verificado
-? '<span class="verified">✔</span>'
-: ''}
-
-${u.betaTester
-? '<span class="beta">⚒️</span>'
-: ''}
-
-</div>
-
-<div class="user-user">
-@${u.usuario || 'user'}
-</div>
-
-<div class="user-stats">
-
-<div>
-<b>${(u.seguidores || []).length}</b>
-<p>Seguidores</p>
-</div>
-
-<div>
-<b>${(u.seguindo || []).length}</b>
-<p>Seguindo</p>
-</div>
-
-</div>
-
-</div>
-
-`;
-
+<div class="user-card">
+<img class="user-banner" src="${u.banner || ''}">
+<img class="user-photo" src="${u.foto || ''}">
+<div class="user-name">${u.nome || 'Usuário'}</div>
+<div class="user-user">@${u.usuario || 'user'}</div>
+</div>`;
 });
-
 }
 
-/* POSTS */
-
+/* FEED */
 window.criarPost = async()=>{
-
-const legenda =
-document.getElementById("caption").value;
-
-const media =
-document.getElementById("media").value;
+const caption = document.getElementById("caption").value;
+const media = document.getElementById("media").value;
 
 if(!media) return;
 
-const tipo =
-media.includes(".mp4")
-? "video"
-: "imagem";
-
 await addDoc(collection(db,"posts"),{
-
 uid:me,
-legenda,
+caption,
 media,
-tipo,
 timestamp:Date.now(),
 likes:[]
-
 });
 
-document.getElementById("caption").value="";
-document.getElementById("media").value="";
-
 loadFeed();
-
 };
 
 async function loadFeed(){
+const feed = document.getElementById("feed");
+feed.innerHTML="";
 
-const feed =
-document.getElementById("feed");
+const q = query(collection(db,"posts"),orderBy("timestamp","desc"));
+const snap = await getDocs(q);
 
-feed.innerHTML = "";
+snap.forEach(async (d)=>{
+const p = d.data();
 
-const q =
-query(
-collection(db,"posts"),
-orderBy("timestamp","desc")
-);
-
-const snap =
-await getDocs(q);
-
-for(const docSnap of snap.docs){
-
-const p = docSnap.data();
-
-const userSnap =
-await getDoc(doc(db,"usuarios",p.uid));
-
-const u =
-userSnap.exists()
-? userSnap.data()
-: {};
+const userSnap = await getDoc(doc(db,"usuarios",p.uid));
+const u = userSnap.data() || {};
 
 feed.innerHTML += `
-
 <div class="post">
-
 <div class="post-header">
-
-<img
-class="post-photo"
-src="${u.foto || 'https://cdn-icons-png.flaticon.com/512/149/149071.png'}">
-
-<div>
-
+<img class="post-photo" src="${u.foto || ''}">
 <b>${u.nome || 'Usuário'}</b>
-
-<div style="color:#9ca3af;">
-@${u.usuario || 'user'}
 </div>
 
-</div>
-
-</div>
-
-${
-p.tipo==="video"
-
-?
-
-`<video
-class="post-media"
-src="${p.media}"
-controls></video>`
-
-:
-
-`<img
-class="post-media"
-src="${p.media}">`
-
+${p.media.includes(".mp4")
+? `<video class="post-media" src="${p.media}" controls></video>`
+: `<img class="post-media" src="${p.media}">`
 }
 
-<div class="post-caption">
-
-${p.legenda || ''}
-
-</div>
-
-<div class="post-actions">
-
-<button>
-❤️ ${p.likes?.length || 0}
-</button>
-
-<button>
-💬 Comentários
-</button>
-
-</div>
-
-</div>
-
-`;
-
-}
-
+<div class="post-caption">${p.caption || ''}</div>
+</div>`;
+});
 }
 
 /* CHAT */
-
 function loadChat(){
+const div = document.getElementById("chatMessages");
 
-const div =
-document.getElementById("chatMessages");
-
-onSnapshot(
-query(
-collection(db,"chat"),
-orderBy("timestamp","asc")
-),
+onSnapshot(query(collection(db,"chat"),orderBy("timestamp","asc")),
 (snapshot)=>{
+div.innerHTML="";
 
-div.innerHTML = "";
-
-snapshot.forEach(docSnap=>{
-
-const m = docSnap.data();
+snapshot.forEach(d=>{
+const m = d.data();
 
 div.innerHTML += `
-
 <div class="chat-message">
-
 <b>${m.nome}</b>
-
 <p>${m.texto}</p>
-
-</div>
-
-`;
-
+</div>`;
 });
 
 div.scrollTop = div.scrollHeight;
-
 });
-
 }
 
 window.enviarMensagem = async()=>{
-
-const texto =
-document.getElementById("chatInput").value;
-
+const texto = document.getElementById("chatInput").value;
 if(!texto) return;
 
-const userSnap =
-await getDoc(doc(db,"usuarios",me));
-
-const u = userSnap.data();
+const userSnap = await getDoc(doc(db,"usuarios",me));
+const u = userSnap.data() || {};
 
 await addDoc(collection(db,"chat"),{
-uid: me,
-nome: u.nome || "Usuário",
-foto: u.foto || "",
+uid:me,
+nome:u.nome || "Usuário",
 texto,
-timestamp: Date.now()
-});
+timestamp:Date.now()
 });
 
 document.getElementById("chatInput").value="";
-
 };
 
 /* PERFIL */
-
 async function loadPerfil(){
-
-const snap =
-await getDoc(doc(db,"usuarios",me));
-
+const snap = await getDoc(doc(db,"usuarios",me));
 if(!snap.exists()) return;
 
 const u = snap.data();
 
-document.getElementById("perfilBanner").src =
-u.banner || "https://picsum.photos/1200/300";
-
-document.getElementById("perfilFoto").src =
-u.foto || "https://cdn-icons-png.flaticon.com/512/149/149071.png";
-
-document.getElementById("perfilNome").innerText =
-u.nome || "Usuário";
-
-document.getElementById("perfilUser").innerText =
-"@" + (u.usuario || "user");
-
-document.getElementById("seguidores").innerText =
-(u.seguidores || []).length;
-
-document.getElementById("seguindo").innerText =
-(u.seguindo || []).length;
-
+document.getElementById("perfilBanner").src = u.banner || "";
+document.getElementById("perfilFoto").src = u.foto || "";
+document.getElementById("perfilNome").innerText = u.nome || "Usuário";
+document.getElementById("perfilUser").innerText = "@"+(u.usuario||"user");
+document.getElementById("seguidores").innerText = (u.seguidores||[]).length;
+document.getElementById("seguindo").innerText = (u.seguindo||[]).length;
 }
 
 /* MENU */
-
-document.querySelectorAll(".menu-btn")
-.forEach(btn=>{
-
-btn.onclick = ()=>{
-
-document.querySelector(".menu-btn.active")
-.classList.remove("active");
-
+document.querySelectorAll(".menu-btn").forEach(btn=>{
+btn.onclick=()=>{
+document.querySelector(".menu-btn.active").classList.remove("active");
 btn.classList.add("active");
 
-document.querySelectorAll(".section")
-.forEach(sec=>{
-
-sec.classList.remove("active");
-
-});
-
-document
-.getElementById(btn.dataset.section + "-section")
-.classList.add("active");
-
+document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+document.getElementById(btn.dataset.section+"-section").classList.add("active");
 };
-
 });
 
 </script>
