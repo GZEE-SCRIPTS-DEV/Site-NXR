@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
 
 <meta charset="UTF-8">
@@ -10,6 +11,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
 <style>
+
+/* RESET */
 
 *{
 margin:0;
@@ -68,7 +71,7 @@ transform:translateX(4px);
 background:#7c3aed;
 }
 
-/* CONTENT */
+/* MAIN */
 
 .main{
 flex:1;
@@ -87,7 +90,7 @@ background:#111827;
 border-bottom:1px solid rgba(255,255,255,0.05);
 position:sticky;
 top:0;
-z-index:99;
+z-index:999;
 }
 
 .header h1{
@@ -104,7 +107,7 @@ font-weight:700;
 cursor:pointer;
 }
 
-/* SECTION */
+/* SECTIONS */
 
 .section{
 display:none;
@@ -389,6 +392,62 @@ font-weight:700;
 cursor:pointer;
 }
 
+/* RESPONSIVO */
+
+@media screen and (max-width:900px){
+
+body{
+flex-direction:column;
+overflow:auto;
+}
+
+.sidebar{
+width:100%;
+height:auto;
+flex-direction:row;
+overflow-x:auto;
+padding:12px;
+gap:10px;
+border-right:none;
+border-bottom:1px solid rgba(255,255,255,0.05);
+position:sticky;
+top:0;
+z-index:999;
+}
+
+.logo{
+display:none;
+}
+
+.sidebar button{
+min-width:170px;
+margin-bottom:0;
+text-align:center;
+}
+
+.main{
+height:auto;
+overflow:visible;
+}
+
+.users-grid{
+grid-template-columns:1fr;
+}
+
+.chat-send{
+flex-direction:column;
+}
+
+.post-actions{
+flex-direction:column;
+}
+
+.profile-stats{
+gap:20px;
+}
+
+}
+
 </style>
 
 </head>
@@ -427,11 +486,14 @@ cursor:pointer;
 
 <div class="main">
 
+<!-- HEADER -->
+
 <div class="header">
 
 <h1>NXR Dashboard</h1>
 
-<button class="profile-btn">
+<button class="profile-btn"
+onclick="window.location.href='perfil.html'">
 Meu Perfil
 </button>
 
@@ -446,8 +508,8 @@ Meu Perfil
 <br>
 
 <p>
-Sistema completo de comunidade com usuários,
-feed, chat e perfis.
+Sistema completo com usuários, chat,
+feed, perfil e comunidade.
 </p>
 
 </div>
@@ -477,7 +539,7 @@ placeholder="O que você quer postar?"></textarea>
 <input
 type="text"
 id="media"
-placeholder="Cole o link da imagem ou vídeo">
+placeholder="Cole link da imagem ou vídeo">
 
 <button onclick="criarPost()">
 Postar
@@ -510,7 +572,7 @@ Enviar
 
 </div>
 
-<!-- PROFILE -->
+<!-- PERFIL -->
 
 <div class="section" id="perfil-section">
 
@@ -519,14 +581,14 @@ Enviar
 <img
 id="perfilBanner"
 class="profile-banner"
-src="">
+src="https://picsum.photos/1200/300">
 
 <div class="profile-content">
 
 <img
 id="perfilFoto"
 class="profile-photo"
-src="">
+src="https://cdn-icons-png.flaticon.com/512/149/149071.png">
 
 <div
 class="profile-name"
@@ -570,6 +632,8 @@ Editar Perfil
 
 <script type="module">
 
+/* FIREBASE */
+
 import { initializeApp }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
@@ -582,7 +646,6 @@ query,
 orderBy,
 doc,
 getDoc,
-updateDoc,
 onSnapshot
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
@@ -592,6 +655,8 @@ getAuth,
 onAuthStateChanged
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+/* CONFIG */
 
 const firebaseConfig = {
 
@@ -627,6 +692,10 @@ loadChat();
 
 loadPerfil();
 
+}else{
+
+window.location.href = "login.html";
+
 }
 
 });
@@ -651,8 +720,7 @@ const uid = docSnap.id;
 
 div.innerHTML += `
 
-<div
-class="user-card"
+<div class="user-card"
 onclick="window.location.href='perfil.html?uid=${uid}'">
 
 <img
@@ -665,7 +733,7 @@ src="${u.foto || 'https://cdn-icons-png.flaticon.com/512/149/149071.png'}">
 
 <div class="user-name">
 
-${u.nome || 'Usuário'}
+${u.nome || "Usuário"}
 
 ${u.verificado
 ? '<span class="verified">✔</span>'
@@ -678,7 +746,7 @@ ${u.betaTester
 </div>
 
 <div class="user-user">
-@${u.usuario || 'user'}
+@${u.usuario || "user"}
 </div>
 
 <div class="user-stats">
@@ -706,6 +774,8 @@ ${u.betaTester
 /* POSTS */
 
 window.criarPost = async()=>{
+
+if(!me) return;
 
 const legenda =
 document.getElementById("caption").value;
@@ -737,6 +807,8 @@ document.getElementById("media").value="";
 loadFeed();
 
 };
+
+/* LOAD FEED */
 
 async function loadFeed(){
 
@@ -807,9 +879,7 @@ src="${p.media}">`
 }
 
 <div class="post-caption">
-
-${p.legenda || ''}
-
+${p.legenda || ""}
 </div>
 
 <div class="post-actions">
@@ -840,10 +910,12 @@ const div =
 document.getElementById("chatMessages");
 
 onSnapshot(
+
 query(
 collection(db,"chat"),
 orderBy("timestamp","asc")
 ),
+
 (snapshot)=>{
 
 div.innerHTML = "";
@@ -872,6 +944,8 @@ div.scrollTop = div.scrollHeight;
 
 }
 
+/* ENVIAR MENSAGEM */
+
 window.enviarMensagem = async()=>{
 
 const texto =
@@ -897,7 +971,7 @@ document.getElementById("chatInput").value="";
 
 };
 
-/* PROFILE */
+/* PERFIL */
 
 async function loadPerfil(){
 
