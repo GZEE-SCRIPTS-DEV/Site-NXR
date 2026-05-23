@@ -1,963 +1,241 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Perfil - NXR</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 
 <style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Poppins,sans-serif;
-}
-
-body{
-background:#000;
-color:#fff;
-min-height:100vh;
-}
-
-/* HEADER */
+*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins,sans-serif;}
+body{background:#000;color:#fff;min-height:100vh;}
 
 header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:20px 30px;
-background:#111827;
+display:flex;justify-content:space-between;align-items:center;
+padding:20px;background:#111827;
 border-bottom:1px solid rgba(255,255,255,0.05);
-position:sticky;
-top:0;
-z-index:100;
 }
 
 .logo{
-font-size:30px;
-font-weight:800;
+font-size:28px;font-weight:800;
 background:linear-gradient(90deg,#c084fc,#60a5fa);
--webkit-background-clip:text;
--webkit-text-fill-color:transparent;
+-webkit-background-clip:text;-webkit-text-fill-color:transparent;
 }
 
 .btn-back{
-padding:10px 20px;
-background:rgba(124,58,237,0.1);
-border:1px solid #7c3aed;
-border-radius:12px;
-color:#c084fc;
-font-weight:700;
-cursor:pointer;
+padding:10px 15px;
+background:#1f2937;
+border-radius:10px;
+color:white;
 text-decoration:none;
-transition:.3s;
 }
 
-.btn-back:hover{
-background:#7c3aed;
-color:white;
-}
+/* PROFILE */
+.container{max-width:900px;margin:auto;padding:20px;}
 
-/* CONTAINER */
-
-.profile-container{
-max-width:1000px;
-margin:auto;
-padding:30px 20px;
-}
-
-/* BANNER */
-
-.banner-section{
-position:relative;
-height:280px;
-border-radius:24px;
+.banner{
+height:220px;
+border-radius:20px;
+background:#111827;
 overflow:hidden;
-background:linear-gradient(135deg,#7c3aed,#2563eb);
-margin-bottom:90px;
+position:relative;
 }
 
-.banner-img{
-width:100%;
-height:100%;
+.banner img{width:100%;height:100%;object-fit:cover;}
+
+.avatar{
+width:120px;height:120px;border-radius:50%;
+border:4px solid #000;
 object-fit:cover;
-display:none;
-}
-
-.banner-upload{
 position:absolute;
-bottom:20px;
-right:20px;
-padding:12px 20px;
-background:rgba(0,0,0,.7);
-border:none;
-border-radius:12px;
-color:white;
-font-weight:700;
-cursor:pointer;
-backdrop-filter:blur(10px);
-transition:.3s;
-}
-
-.banner-upload:hover{
-background:#000;
-}
-
-/* AVATAR */
-
-.profile-avatar-section{
-position:absolute;
-bottom:-70px;
-left:40px;
-}
-
-.profile-avatar{
-width:150px;
-height:150px;
-border-radius:50%;
-object-fit:cover;
-border:6px solid #000;
+bottom:-60px;left:20px;
 background:#222;
 }
 
-.avatar-upload-btn{
-position:absolute;
-bottom:5px;
-right:5px;
-width:42px;
-height:42px;
-border-radius:50%;
-background:#7c3aed;
-display:flex;
-align-items:center;
-justify-content:center;
-cursor:pointer;
-font-size:18px;
-border:3px solid #000;
-transition:.3s;
+.info{
+margin-top:70px;
 }
 
-.avatar-upload-btn:hover{
-transform:scale(1.1);
+.name{
+font-size:28px;font-weight:800;
+display:flex;gap:10px;align-items:center;
 }
 
-input[type=file]{
-display:none;
-}
-
-/* INFO */
-
-.profile-info{
-padding:20px 30px;
-}
-
-.profile-name{
-font-size:34px;
-font-weight:800;
-display:flex;
-align-items:center;
-gap:10px;
-}
-
-.verified-badge{
-width:24px;
-height:24px;
-background:#3b82f6;
-border-radius:50%;
-display:none;
-align-items:center;
-justify-content:center;
-font-size:14px;
-}
-
-.profile-username{
-margin-top:6px;
-font-size:16px;
+.user{
 color:#9ca3af;
 }
 
-.profile-bio{
-margin-top:25px;
-padding:20px;
+.bio{
+margin-top:15px;
 background:#111827;
-border-radius:18px;
-border:1px solid rgba(255,255,255,0.05);
-line-height:1.6;
-color:#d1d5db;
+padding:15px;
+border-radius:15px;
 }
 
-/* STATS */
-
-.profile-stats{
-display:flex;
-gap:40px;
-margin-top:30px;
-flex-wrap:wrap;
+.stats{
+display:flex;gap:30px;margin-top:20px;
 }
 
-.stat-item{
+.stats div{
 text-align:center;
 }
 
-.stat-number{
-font-size:28px;
-font-weight:800;
-color:#c084fc;
+.stats b{
+font-size:22px;color:#c084fc;
 }
 
-.stat-label{
-font-size:14px;
-color:#9ca3af;
-margin-top:5px;
-}
-
-/* EDIT */
-
-.edit-section{
-margin-top:40px;
+.edit{
+margin-top:30px;
 background:#111827;
-padding:30px;
-border-radius:24px;
-border:1px solid rgba(255,255,255,0.05);
+padding:20px;
+border-radius:20px;
 }
 
-.edit-section h3{
-font-size:26px;
-margin-bottom:25px;
-background:linear-gradient(90deg,#c084fc,#60a5fa);
--webkit-background-clip:text;
--webkit-text-fill-color:transparent;
-}
-
-.form-group{
-margin-bottom:20px;
-}
-
-.form-group label{
-display:block;
-margin-bottom:8px;
-font-weight:600;
-font-size:14px;
-}
-
-.form-group input,
-.form-group textarea{
+input,textarea{
 width:100%;
-padding:15px 20px;
-border-radius:14px;
+padding:12px;
+margin-top:10px;
+border-radius:10px;
 border:none;
 background:#0f172a;
 color:white;
-outline:none;
-font-size:15px;
 }
 
-.form-group textarea{
-resize:vertical;
-min-height:120px;
-}
-
-.btn-save{
+button{
+margin-top:15px;
 width:100%;
-padding:16px;
+padding:12px;
 border:none;
-border-radius:14px;
-background:linear-gradient(135deg,#7c3aed,#2563eb);
+border-radius:10px;
+background:#7c3aed;
 color:white;
-font-size:16px;
 font-weight:700;
 cursor:pointer;
-transition:.3s;
 }
 
-.btn-save:hover{
-transform:translateY(-2px);
-}
-
-/* MSG */
-
-.success-msg,
-.error-msg{
-padding:15px;
-border-radius:14px;
-margin-bottom:20px;
-font-weight:700;
-display:none;
-}
-
-.success-msg{
-background:rgba(34,197,94,.1);
-border:1px solid #22c55e;
-color:#22c55e;
-}
-
-.error-msg{
-background:rgba(239,68,68,.1);
-border:1px solid #ef4444;
-color:#ef4444;
-}
-
-/* MOBILE */
-
-@media(max-width:768px){
-
-header{
-padding:15px;
-}
-
-.logo{
-font-size:24px;
-}
-
-.banner-section{
-height:220px;
-margin-bottom:80px;
-}
-
-.profile-avatar-section{
-left:50%;
-transform:translateX(-50%);
-}
-
-.profile-avatar{
-width:130px;
-height:130px;
-}
-
-.profile-info{
-padding:10px;
-text-align:center;
-}
-
-.profile-name{
-justify-content:center;
-font-size:28px;
-}
-
-.profile-stats{
-justify-content:center;
-gap:25px;
-}
-
-.edit-section{
-padding:20px;
-}
-
-}
-
+.hidden{display:none;}
 </style>
-
 </head>
 
 <body>
 
 <header>
-
-<div class="logo">
-NXR
-</div>
-
-<a href="dashboard.html" class="btn-back">
-← Voltar
-</a>
-
+<div class="logo">NXR</div>
+<a class="btn-back" href="dashboard.html">← Voltar</a>
 </header>
 
-<div class="profile-container">
+<div class="container">
 
-<div class="success-msg" id="successMsg">
-✓ Perfil atualizado!
+<div class="banner">
+<img id="bannerImg" src="">
+<img id="avatarImg" class="avatar" src="https://cdn-icons-png.flaticon.com/512/149/149071.png">
 </div>
 
-<div class="error-msg" id="errorMsg">
-✗ Erro!
+<div class="info">
+<div class="name">
+<span id="name">Carregando...</span>
 </div>
 
-<!-- BANNER -->
+<div class="user" id="user">@user</div>
 
-<div class="banner-section">
+<div class="bio" id="bio">...</div>
 
-<img
-id="bannerImg"
-class="banner-img">
-
-<button
-class="banner-upload"
-onclick="document.getElementById('bannerInput').click()">
-
-📷 Alterar Banner
-
-</button>
-
-<div class="profile-avatar-section">
-
-<img
-id="avatarImg"
-class="profile-avatar"
-src="https://cdn-icons-png.flaticon.com/512/149/149071.png">
-
-<div
-class="avatar-upload-btn"
-onclick="document.getElementById('avatarInput').click()">
-
-📷
-
+<div class="stats">
+<div><b id="followers">0</b><p>Seguidores</p></div>
+<div><b id="following">0</b><p>Seguindo</p></div>
+</div>
 </div>
 
-</div>
+<div class="edit" id="editBox">
+<h3>Editar perfil</h3>
 
-</div>
+<input id="nameInput" placeholder="Nome">
+<input id="userInput" placeholder="Usuário">
+<textarea id="bioInput" placeholder="Bio"></textarea>
 
-<input
-type="file"
-id="avatarInput"
-accept="image/*"
-onchange="handleAvatarUpload(event)">
+<input id="avatarInput" placeholder="URL da foto">
+<input id="bannerInput" placeholder="URL do banner">
 
-<input
-type="file"
-id="bannerInput"
-accept="image/*"
-onchange="handleBannerUpload(event)">
-
-<!-- INFO -->
-
-<div class="profile-info">
-
-<div class="profile-name">
-
-<span id="displayName">
-Carregando...
-</span>
-
-<span
-class="verified-badge"
-id="verifiedBadge">
-
-✔
-
-</span>
-
-</div>
-
-<div
-class="profile-username"
-id="displayUsername">
-
-@usuario
-
-</div>
-
-<div
-class="profile-bio"
-id="displayBio">
-
-Sem bio...
-
-</div>
-
-<!-- STATS -->
-
-<div class="profile-stats">
-
-<div class="stat-item">
-
-<div
-class="stat-number"
-id="followersCount">
-
-0
-
-</div>
-
-<div class="stat-label">
-Seguidores
-</div>
-
-</div>
-
-<div class="stat-item">
-
-<div
-class="stat-number"
-id="followingCount">
-
-0
-
-</div>
-
-<div class="stat-label">
-Seguindo
-</div>
-
-</div>
-
-<div class="stat-item">
-
-<div
-class="stat-number"
-id="postsCount">
-
-0
-
-</div>
-
-<div class="stat-label">
-Posts
-</div>
-
-</div>
-
-</div>
-
-<!-- EDIT -->
-
-<div class="edit-section">
-
-<h3>
-✏️ Editar Perfil
-</h3>
-
-<div class="form-group">
-
-<label>
-Nome
-</label>
-
-<input
-type="text"
-id="nameInput"
-placeholder="Seu nome">
-
-</div>
-
-<div class="form-group">
-
-<label>
-Usuário
-</label>
-
-<input
-type="text"
-id="usernameInput"
-placeholder="@usuario">
-
-</div>
-
-<div class="form-group">
-
-<label>
-Bio
-</label>
-
-<textarea
-id="bioInput"
-placeholder="Sua bio..."></textarea>
-
-</div>
-
-<button
-class="btn-save"
-onclick="saveProfile()">
-
-💾 Salvar
-
-</button>
-
-</div>
-
+<button onclick="save()">Salvar</button>
 </div>
 
 </div>
 
 <script type="module">
 
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-import {
-getAuth,
-onAuthStateChanged
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-import {
-getFirestore,
-doc,
-getDoc,
-updateDoc,
-collection,
-query,
-where,
-getDocs
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-import {
-getStorage,
-ref,
-uploadBytes,
-getDownloadURL
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
-
-/* FIREBASE */
-
-const firebaseConfig = {
-
+const app = initializeApp({
 apiKey: "AIzaSyDmuDzQBWi9G1DculuOy69v3BH0ulhUwcM",
 authDomain: "siteoficialgzee.firebaseapp.com",
-projectId: "siteoficialgzee",
-storageBucket: "siteoficialgzee.firebasestorage.app",
-messagingSenderId: "927527396643",
-appId: "1:927527396643:web:e1de375c6994d351995896"
-
-};
-
-const app = initializeApp(firebaseConfig);
+projectId: "siteoficialgzee"
+});
 
 const auth = getAuth(app);
-
 const db = getFirestore(app);
 
-const storage = getStorage(app);
+let uidAtual = null;
+let perfilUid = new URLSearchParams(location.search).get("uid");
 
-let currentUser = null;
-
-/* UID URL */
-
-const params =
-new URLSearchParams(window.location.search);
-
-const profileUid =
-params.get("uid");
-
-/* LOGIN */
-
-onAuthStateChanged(auth,async(user)=>{
+onAuthStateChanged(auth, async(user)=>{
 
 if(!user){
-
-window.location.href = "login.html";
-
+location.href="login.html";
 return;
-
 }
 
-currentUser = user;
+uidAtual = user.uid;
 
-loadProfile();
+if(!perfilUid) perfilUid = user.uid;
+
+load(perfilUid);
 
 });
 
-/* LOAD PROFILE */
+async function load(uid){
 
-async function loadProfile(){
-
-const uid =
-profileUid || currentUser.uid;
-
-const snap =
-await getDoc(doc(db,"usuarios",uid));
-
+const snap = await getDoc(doc(db,"usuarios",uid));
 if(!snap.exists()) return;
 
 const u = snap.data();
 
-/* INFO */
+name.textContent = u.nome || "Sem nome";
+user.textContent = "@" + (u.usuario || "user");
+bio.textContent = u.bio || "Sem bio";
 
-document.getElementById("displayName")
-.textContent =
-u.nome || "Usuário";
+avatarImg.src = u.foto || avatarImg.src;
+bannerImg.src = u.banner || "";
 
-document.getElementById("displayUsername")
-.textContent =
-"@" + (u.usuario || "user");
+followers.textContent = (u.seguidores||[]).length;
+following.textContent = (u.seguindo||[]).length;
 
-document.getElementById("displayBio")
-.textContent =
-u.bio || "Sem bio...";
+if(uid !== uidAtual){
+editBox.classList.add("hidden");
+}
 
-/* INPUTS */
-
-document.getElementById("nameInput")
-.value =
-u.nome || "";
-
-document.getElementById("usernameInput")
-.value =
-u.usuario || "";
-
-document.getElementById("bioInput")
-.value =
-u.bio || "";
-
-/* FOTO */
-
-if(u.foto){
-
-document.getElementById("avatarImg")
-.src = u.foto;
+nameInput.value = u.nome || "";
+userInput.value = u.usuario || "";
+bioInput.value = u.bio || "";
 
 }
 
-/* BANNER */
+window.save = async ()=>{
 
-if(u.banner){
+await updateDoc(doc(db,"usuarios",uidAtual),{
+nome:nameInput.value,
+usuario:userInput.value,
+bio:bioInput.value,
+foto:avatarInput.value,
+banner:bannerInput.value
+});
 
-const banner =
-document.getElementById("bannerImg");
-
-banner.src = u.banner;
-
-banner.style.display = "block";
-
-}
-
-/* VERIFIED */
-
-if(u.verificado){
-
-document.getElementById("verifiedBadge")
-.style.display = "inline-flex";
+alert("Salvo!");
+location.reload();
 
 }
-
-/* STATS */
-
-document.getElementById("followersCount")
-.textContent =
-(u.seguidores || []).length;
-
-document.getElementById("followingCount")
-.textContent =
-(u.seguindo || []).length;
-
-/* POSTS */
-
-const postsSnap =
-await getDocs(
-query(
-collection(db,"posts"),
-where("uid","==",uid)
-)
-);
-
-document.getElementById("postsCount")
-.textContent =
-postsSnap.size;
-
-/* NÃO É MEU PERFIL */
-
-if(uid !== currentUser.uid){
-
-document.querySelector(".edit-section")
-.style.display = "none";
-
-document.querySelector(".banner-upload")
-.style.display = "none";
-
-document.querySelector(".avatar-upload-btn")
-.style.display = "none";
-
-}
-
-}
-
-/* MESSAGE */
-
-function showMessage(type,msg){
-
-const el =
-document.getElementById(
-type==="success"
-? "successMsg"
-: "errorMsg"
-);
-
-el.textContent = msg;
-
-el.style.display = "block";
-
-setTimeout(()=>{
-
-el.style.display = "none";
-
-},3000);
-
-}
-
-/* FOTO */
-
-window.handleAvatarUpload = async(event)=>{
-
-const file =
-event.target.files[0];
-
-if(!file) return;
-
-try{
-
-const storageRef =
-ref(
-storage,
-`avatars/${currentUser.uid}_${Date.now()}`
-);
-
-await uploadBytes(storageRef,file);
-
-const url =
-await getDownloadURL(storageRef);
-
-await updateDoc(
-doc(db,"usuarios",currentUser.uid),
-{
-foto:url
-}
-);
-
-document.getElementById("avatarImg")
-.src = url;
-
-showMessage(
-"success",
-"✓ Foto atualizada!"
-);
-
-}catch{
-
-showMessage(
-"error",
-"✗ Erro ao enviar foto"
-);
-
-}
-
-};
-
-/* BANNER */
-
-window.handleBannerUpload = async(event)=>{
-
-const file =
-event.target.files[0];
-
-if(!file) return;
-
-try{
-
-const storageRef =
-ref(
-storage,
-`banners/${currentUser.uid}_${Date.now()}`
-);
-
-await uploadBytes(storageRef,file);
-
-const url =
-await getDownloadURL(storageRef);
-
-await updateDoc(
-doc(db,"usuarios",currentUser.uid),
-{
-banner:url
-}
-);
-
-const banner =
-document.getElementById("bannerImg");
-
-banner.src = url;
-
-banner.style.display = "block";
-
-showMessage(
-"success",
-"✓ Banner atualizado!"
-);
-
-}catch{
-
-showMessage(
-"error",
-"✗ Erro ao enviar banner"
-);
-
-}
-
-};
-
-/* SAVE */
-
-window.saveProfile = async()=>{
-
-const nome =
-document.getElementById("nameInput")
-.value.trim();
-
-const usuario =
-document.getElementById("usernameInput")
-.value
-.trim()
-.replace("@","");
-
-const bio =
-document.getElementById("bioInput")
-.value.trim();
-
-if(!nome || !usuario){
-
-showMessage(
-"error",
-"✗ Nome obrigatório"
-);
-
-return;
-
-}
-
-try{
-
-await updateDoc(
-doc(db,"usuarios",currentUser.uid),
-{
-nome,
-usuario,
-bio
-}
-);
-
-document.getElementById("displayName")
-.textContent = nome;
-
-document.getElementById("displayUsername")
-.textContent =
-"@" + usuario;
-
-document.getElementById("displayBio")
-.textContent =
-bio || "Sem bio...";
-
-showMessage(
-"success",
-"✓ Perfil salvo!"
-);
-
-}catch{
-
-showMessage(
-"error",
-"✗ Erro ao salvar"
-);
-
-}
-
-};
 
 </script>
 
