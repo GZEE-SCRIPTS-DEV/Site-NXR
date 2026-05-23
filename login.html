@@ -220,15 +220,46 @@ showError(msg);
 }
 
 window.loginGoogle = async () => {
+
 try{
+
+const provider = new GoogleAuthProvider();
+
+provider.setCustomParameters({
+prompt:"select_account"
+});
+
 const res = await signInWithPopup(auth,provider);
+
 await criarUsuarioSeNaoExistir(res.user);
+
 window.location.href = "dashboard.html";
+
 }catch(e){
-showError("Erro ao entrar com Google!");
-}
+
+console.log(e);
+
+if(e.code === "auth/popup-closed-by-user"){
+showError("Login cancelado!");
+return;
 }
 
+if(e.code === "auth/unauthorized-domain"){
+showError("Domínio não autorizado no Firebase!");
+return;
+}
+
+if(e.code === "auth/popup-blocked"){
+showError("O navegador bloqueou o popup!");
+return;
+}
+
+showError(e.message);
+
+}
+
+}
+  
 window.toggleMode = () => {
 mode = mode === "login" ? "cadastro" : "login";
 if(mode === "login"){
