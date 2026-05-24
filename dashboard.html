@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NXR Dashboard</title>
+<title>NXR</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
@@ -86,13 +86,15 @@ padding:20px;
 display:block;
 }
 
-.users-grid{
+.users-grid,
+.groups-grid{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
 gap:20px;
 }
 
-.user-card{
+.user-card,
+.group-card{
 background:#111827;
 padding:20px;
 border-radius:20px;
@@ -101,11 +103,13 @@ transition:.2s;
 border:1px solid rgba(255,255,255,0.05);
 }
 
-.user-card:hover{
+.user-card:hover,
+.group-card:hover{
 transform:translateY(-4px);
 }
 
-.user-banner{
+.user-banner,
+.group-banner{
 width:100%;
 height:120px;
 border-radius:14px;
@@ -113,7 +117,8 @@ object-fit:cover;
 background:#020617;
 }
 
-.user-photo{
+.user-photo,
+.group-photo{
 width:90px;
 height:90px;
 border-radius:50%;
@@ -123,7 +128,8 @@ object-fit:cover;
 background:#222;
 }
 
-.user-name{
+.user-name,
+.group-name{
 margin-top:10px;
 font-size:22px;
 font-weight:700;
@@ -132,12 +138,13 @@ align-items:center;
 gap:6px;
 }
 
-.user-user{
+.user-user,
+.group-desc{
 color:#9ca3af;
 margin-top:4px;
 }
 
-.verified,.beta{
+.verified,.beta,.partner{
 width:18px;
 height:18px;
 border-radius:50%;
@@ -149,6 +156,7 @@ font-size:11px;
 
 .verified{background:#3b82f6;}
 .beta{background:#f59e0b;}
+.partner{background:#22c55e;}
 
 .create-post{
 background:#111827;
@@ -172,7 +180,8 @@ outline:none;
 
 .create-post button,
 .chat-send button,
-.comment-send button{
+.comment-send button,
+.profile-edit{
 padding:15px;
 border:none;
 border-radius:14px;
@@ -250,6 +259,21 @@ margin-bottom:10px;
 cursor:pointer;
 }
 
+.comment-top{
+display:flex;
+align-items:flex-start;
+gap:10px;
+}
+
+.comment-photo{
+width:42px;
+height:42px;
+border-radius:50%;
+object-fit:cover;
+background:#222;
+flex-shrink:0;
+}
+
 .comment p{
 color:#d1d5db;
 margin-top:4px;
@@ -284,6 +308,7 @@ background:#0f172a;
 padding:12px;
 border-radius:14px;
 margin-bottom:12px;
+cursor:pointer;
 }
 
 .chat-send{
@@ -334,6 +359,11 @@ background:#222;
 font-size:30px;
 font-weight:800;
 margin-top:10px;
+display:flex;
+justify-content:center;
+align-items:center;
+gap:8px;
+flex-wrap:wrap;
 }
 
 .profile-user{
@@ -350,13 +380,6 @@ margin-top:20px;
 
 .profile-edit{
 margin-top:20px;
-padding:14px 20px;
-border:none;
-border-radius:14px;
-background:#7c3aed;
-color:white;
-font-weight:700;
-cursor:pointer;
 }
 
 @media(max-width:900px){
@@ -365,7 +388,7 @@ body{flex-direction:column;overflow:auto;}
 .logo{display:none;}
 .sidebar button{min-width:160px;text-align:center;}
 .main{height:auto;}
-.users-grid{grid-template-columns:1fr;}
+.users-grid,.groups-grid{grid-template-columns:1fr;}
 .post-actions,.chat-send,.comment-send{flex-direction:column;}
 }
 </style>
@@ -379,6 +402,7 @@ body{flex-direction:column;overflow:auto;}
 <button class="menu-btn" data-section="usuarios">👥 Usuários</button>
 <button class="menu-btn" data-section="feed">📸 Feed</button>
 <button class="menu-btn" data-section="chat">💬 Chat Global</button>
+<button class="menu-btn" data-section="grupos">🤝 Grupos</button>
 <button class="menu-btn" data-section="perfil">⚙️ Perfil</button>
 </div>
 
@@ -386,13 +410,13 @@ body{flex-direction:column;overflow:auto;}
 
 <div class="header">
 <h1>NXR Dashboard</h1>
-<button onclick="showSection('perfil')" class="profile-edit">Meu Perfil</button>
+<button onclick="abrirMeuPerfil()" class="profile-edit">Meu Perfil</button>
 </div>
 
 <div class="section active" id="dashboard-section">
 <h2>Bem-vindo à NXR</h2>
 <br>
-<p>NXR é uma plataforma social moderna que reúne diversas formas de interação em um só lugar. Os usuários podem compartilhar conteúdos através do feed, conversar em tempo real no chat global, participar de grupos parceiros para fortalecer conexões com comunidades aliadas e explorar a aba de usuários, onde é possível conhecer perfis, acompanhar atividades e interagir com outros membros. Tudo isso em um ambiente focado em comunidade, conectividade e experiência social. 🚀💜</p>
+<p>NXR é uma plataforma social moderna que reúne diversas formas de interação em um só lugar. Os usuários podem compartilhar conteúdos através do feed, conversar em tempo real no chat global, participar de grupos parceiros para fortalecer conexões com comunidades aliadas e explorar a aba de usuários, onde é possível conhecer perfis, acompanhar atividades e interagir com outros membros. Tudo isso em um ambiente focado em comunidade, conectividade e experiência social. 🚀💜.</p>
 </div>
 
 <div class="section" id="usuarios-section">
@@ -404,7 +428,7 @@ body{flex-direction:column;overflow:auto;}
 <div class="section" id="feed-section">
 <div class="create-post">
 <textarea id="caption" placeholder="O que você quer postar?"></textarea>
-<input type="text" id="media" placeholder="Cole o link da imagem ou vídeo">
+<input type="text" id="media" placeholder="Cole o link da imagem ou vídeo (O link deve ser pelo Catbox.moe)">
 <button onclick="criarPost()">Postar</button>
 </div>
 <div id="feed"></div>
@@ -416,6 +440,12 @@ body{flex-direction:column;overflow:auto;}
 <input type="text" id="chatInput" placeholder="Digite sua mensagem">
 <button onclick="enviarMensagem()">Enviar</button>
 </div>
+</div>
+
+<div class="section" id="grupos-section">
+<h2>Grupos Verificados e Parceiros</h2>
+<br>
+<div class="groups-grid" id="groups"></div>
 </div>
 
 <div class="section" id="perfil-section">
@@ -431,7 +461,7 @@ body{flex-direction:column;overflow:auto;}
 <div><b id="seguindo">0</b><p>Seguindo</p></div>
 </div>
 
-<button class="profile-edit" onclick="window.location.href='editarperfil.html'">
+<button id="editarBtn" class="profile-edit" onclick="window.location.href='editarperfil.html'">
 Editar Perfil
 </button>
 </div>
@@ -479,8 +509,8 @@ const auth = getAuth(app);
 let me = null;
 let perfilAtual = null;
 
-const fotoPadrao = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
-const bannerPadrao = "https://picsum.photos/1200/300";
+const fotoPadrao = "https://files.catbox.moe/zp9om9.png";
+const bannerPadrao = "https://files.catbox.moe/73yxoi.avif";
 
 onAuthStateChanged(auth, async(user)=>{
 if(!user){
@@ -489,29 +519,14 @@ return;
 }
 
 me = user.uid;
-perfilAtual = getUidUrl() || me;
+perfilAtual = me;
 
 loadUsers();
 loadFeed();
 loadChat();
-loadPerfil(perfilAtual);
-abrirTabUrl();
+loadGroups();
+loadPerfil(me);
 });
-
-function getUidUrl(){
-return new URLSearchParams(window.location.search).get("uid");
-}
-
-function getTabUrl(){
-return new URLSearchParams(window.location.search).get("tab");
-}
-
-function abrirTabUrl(){
-const tab = getTabUrl();
-if(tab){
-showSection(tab);
-}
-}
 
 window.showSection = (section)=>{
 document.querySelectorAll(".menu-btn").forEach(b=>b.classList.remove("active"));
@@ -526,15 +541,24 @@ if(sec) sec.classList.add("active");
 
 document.querySelectorAll(".menu-btn").forEach(btn=>{
 btn.onclick = ()=>{
+if(btn.dataset.section === "perfil"){
+abrirMeuPerfil();
+}else{
 showSection(btn.dataset.section);
+}
 };
 });
+
+window.abrirMeuPerfil = ()=>{
+perfilAtual = me;
+loadPerfil(me);
+showSection("perfil");
+};
 
 window.openProfile = (uid)=>{
 perfilAtual = uid;
 loadPerfil(uid);
 showSection("perfil");
-history.pushState(null,"",`?uid=${uid}&tab=perfil`);
 };
 
 async function loadUsers(){
@@ -564,11 +588,50 @@ ${u.betaTester ? `<span class="beta">⚒️</span>` : ""}
 });
 }
 
+async function loadGroups(){
+const div = document.getElementById("groups");
+div.innerHTML = "";
+
+const snap = await getDocs(collection(db,"grupos"));
+
+let encontrou = false;
+
+snap.forEach(docSnap=>{
+const g = docSnap.data();
+
+const isVerificado = g.verificado === true;
+const isParceiro = g.parceiro === true;
+
+if(!isVerificado && !isParceiro) return;
+
+encontrou = true;
+
+div.innerHTML += `
+<div class="group-card" onclick="${g.link ? `window.open('${g.link}','_blank')` : ""}">
+<img class="group-banner" src="${g.banner || bannerPadrao}">
+<img class="group-photo" src="${g.foto || fotoPadrao}">
+
+<div class="group-name">
+${g.nome || "Grupo"}
+${isVerificado ? `<span class="verified">✔</span>` : ""}
+${isParceiro ? `<span class="partner">🤝</span>` : ""}
+</div>
+
+<div class="group-desc">${g.descricao || "Grupo parceiro/verificado da NXR."}</div>
+</div>
+`;
+});
+
+if(!encontrou){
+div.innerHTML = `<p style="color:#9ca3af;">Nenhum grupo verificado ou parceiro encontrado.</p>`;
+}
+}
+
 window.criarPost = async()=>{
 const legenda = document.getElementById("caption").value.trim();
 const media = document.getElementById("media").value.trim();
 
-if(!media) return alert("Coloque o link da imagem ou vídeo.");
+if(!media) return alert("Coloque o link da imagem ou vídeo (link deve ser do Catbox.moe)");
 
 const tipo = media.includes(".mp4") || media.includes(".webm") || media.includes(".mov")
 ? "video"
@@ -698,8 +761,13 @@ comentarios
 .forEach(c=>{
 list.innerHTML += `
 <div class="comment" onclick="openProfile('${c.uid}')">
+<div class="comment-top">
+<img class="comment-photo" src="${c.foto || fotoPadrao}">
+<div>
 <b>${c.nome || "Usuário"} <span style="color:#9ca3af;">@${c.usuario || "user"}</span></b>
 <p>${c.texto}</p>
+</div>
+</div>
 </div>
 `;
 });
@@ -719,6 +787,7 @@ comentarios: arrayUnion({
 uid: me,
 nome: u.nome || "Usuário",
 usuario: u.usuario || "user",
+foto: u.foto || "",
 texto,
 timestamp: Date.now()
 })
@@ -780,14 +849,24 @@ const u = snap.data();
 
 document.getElementById("perfilBanner").src = u.banner || bannerPadrao;
 document.getElementById("perfilFoto").src = u.foto || fotoPadrao;
+
 document.getElementById("perfilNome").innerHTML = `
 ${u.nome || "Usuário"}
 ${u.verificado ? `<span class="verified">✔</span>` : ""}
 ${u.betaTester ? `<span class="beta">⚒️</span>` : ""}
 `;
+
 document.getElementById("perfilUser").innerText = "@" + (u.usuario || "user");
 document.getElementById("seguidores").innerText = (u.seguidores || []).length;
 document.getElementById("seguindo").innerText = (u.seguindo || []).length;
+
+const editarBtn = document.getElementById("editarBtn");
+
+if(uid === me){
+editarBtn.style.display = "inline-block";
+}else{
+editarBtn.style.display = "none";
+}
 }
 
 </script>
