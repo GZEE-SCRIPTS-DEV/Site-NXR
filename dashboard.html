@@ -427,6 +427,83 @@ margin-top:20px;
 margin-top:20px;
 }
 
+.follow-btn{
+margin-top:20px;
+padding:15px 28px;
+border:none;
+border-radius:14px;
+background:#7c3aed;
+color:white;
+font-weight:800;
+cursor:pointer;
+transition:.2s;
+}
+
+.follow-btn:hover{
+background:#6d28d9;
+}
+
+.follow-btn.following{
+background:#1f2937;
+border:1px solid rgba(255,255,255,.12);
+}
+
+.modal-bg{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.65);
+display:none;
+align-items:center;
+justify-content:center;
+z-index:9999;
+padding:20px;
+}
+
+.modal-box{
+width:100%;
+max-width:420px;
+background:#111827;
+border:1px solid rgba(255,255,255,.08);
+border-radius:22px;
+padding:24px;
+text-align:center;
+box-shadow:0 25px 80px rgba(0,0,0,.45);
+}
+
+.modal-box h3{
+font-size:22px;
+margin-bottom:10px;
+}
+
+.modal-box p{
+color:#9ca3af;
+margin-bottom:22px;
+}
+
+.modal-actions{
+display:flex;
+gap:12px;
+}
+
+.modal-actions button{
+flex:1;
+padding:14px;
+border:none;
+border-radius:14px;
+color:white;
+font-weight:800;
+cursor:pointer;
+}
+
+.cancel-btn{
+background:#374151;
+}
+
+.confirm-btn{
+background:#ef4444;
+}
+
+
 @media(max-width:900px){
 body{flex-direction:column;overflow:auto;}
 .sidebar{width:100%;flex-direction:row;overflow-x:auto;}
@@ -509,10 +586,25 @@ body{flex-direction:column;overflow:auto;}
 <button id="editarBtn" class="profile-edit" onclick="window.location.href='editarperfil.html'">
 Editar Perfil
 </button>
+
+<button id="seguirBtn" class="follow-btn" onclick="acaoSeguir()">
+Seguir
+</button>
 </div>
 </div>
 </div>
 
+</div>
+
+<div class="modal-bg" id="unfollowModal">
+<div class="modal-box">
+<h3>Parar de seguir?</h3>
+<p id="unfollowText">Você quer parar de seguir essa pessoa?</p>
+<div class="modal-actions">
+<button class="cancel-btn" onclick="fecharModalPararSeguir()">Cancelar</button>
+<button class="confirm-btn" onclick="confirmarPararSeguir()">Confirmar</button>
+</div>
+</div>
 </div>
 
 <script type="module">
@@ -553,6 +645,8 @@ const auth = getAuth(app);
 
 let me = null;
 let perfilAtual = null;
+let perfilAtualNome = "Usuário";
+let confirmarPararUid = null;
 
 const fotoPadrao = "https://files.catbox.moe/zp9om9.png";
 const bannerPadrao = "https://files.catbox.moe/73yxoi.avif";
@@ -736,7 +830,7 @@ p.tipo === "video"
 
 <div class="post-actions">
 <button onclick="curtirPost('${postId}')">
-${curtiu ? "💜" : "❤️"} ${(p.likes || []).length}
+${curtiu ? "❤️" : "🤍"} ${(p.likes || []).length}
 </button>
 
 <button onclick="toggleComentarios('${postId}')">
@@ -950,14 +1044,87 @@ document.getElementById("perfilUser").innerText = "@" + (u.usuario || "user");
 document.getElementById("seguidores").innerText = (u.seguidores || []).length;
 document.getElementById("seguindo").innerText = (u.seguindo || []).length;
 
+perfilAtualNome = u.nome || "Usuário";
+
 const editarBtn = document.getElementById("editarBtn");
+const seguirBtn = document.getElementById("seguirBtn");
 
 if(uid === me){
 editarBtn.style.display = "inline-block";
+seguirBtn.style.display = "none";
 }else{
 editarBtn.style.display = "none";
+seguirBtn.style.display = "inline-block";
+await atualizarBotaoSeguir(uid);
 }
 }
+
+async function atualizarBotaoSeguir(uid){
+const seguirBtn = document.getElementById("seguirBtn");
+if(!seguirBtn || !me || uid === me) return;
+
+const meuSnap = await getDoc(doc(db,"usuarios",me));
+const meusDados = meuSnap.exists() ? meuSnap.data() : {};
+const seguindoLista = meusDados.seguindo || [];
+const jaSegue = seguindoLista.includes(uid);
+
+seguirBtn.dataset.uid = uid;
+seguirBtn.innerText = jaSegue ? "Seguindo" : "Seguir";
+seguirBtn.classList.toggle("following", jaSegue);
+}
+
+window.acaoSeguir = async()=>{
+if(!perfilAtual || perfilAtual === me) return;
+
+const meuSnap = await getDoc(doc(db,"usuarios",me));
+const meusDados = meuSnap.exists() ? meuSnap.data() : {};
+const jaSegue = (meusDados.seguindo || []).includes(perfilAtual);
+
+if(jaSegue){
+confirmarPararUid = perfilAtual;
+document.getElementById("unfollowText").innerText = `Você quer parar de seguir ${perfilAtualNome}?`;
+document.getElementById("unfollowModal").style.display = "flex";
+}else{
+await seguirUsuario(perfilAtual);
+}
+};
+
+async function seguirUsuario(uid){
+if(!uid || uid === me) return;
+
+await updateDoc(doc(db,"usuarios",me),{
+seguindo: arrayUnion(uid)
+});
+
+await updateDoc(doc(db,"usuarios",uid),{
+seguidores: arrayUnion(me)
+});
+
+await loadPerfil(uid);
+loadUsers();
+}
+
+window.fecharModalPararSeguir = ()=>{
+confirmarPararUid = null;
+document.getElementById("unfollowModal").style.display = "none";
+};
+
+window.confirmarPararSeguir = async()=>{
+const uid = confirmarPararUid;
+if(!uid || uid === me) return;
+
+await updateDoc(doc(db,"usuarios",me),{
+seguindo: arrayRemove(uid)
+});
+
+await updateDoc(doc(db,"usuarios",uid),{
+seguidores: arrayRemove(me)
+});
+
+fecharModalPararSeguir();
+await loadPerfil(uid);
+loadUsers();
+};
 
 </script>
 
