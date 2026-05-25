@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Editar Perfil - NXR</title>
+
+<link rel="icon" type="image/png" href="https://files.catbox.moe/am9d4c.png">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Poppins,sans-serif;
+}
+
+body{
+min-height:100vh;
+background:#0b0f19;
+color:white;
+display:flex;
+justify-content:center;
+align-items:center;
+padding:20px;
+}
+
+.container{
+width:100%;
+max-width:650px;
+background:#111827;
+border-radius:24px;
+padding:25px;
+border:1px solid rgba(255,255,255,0.08);
+box-shadow:0 20px 60px rgba(0,0,0,0.35);
+}
+
+h1{
+font-size:30px;
+margin-bottom:8px;
+color:#a855f7;
+}
+
+.sub{
+color:#9ca3af;
+margin-bottom:25px;
+font-size:14px;
+}
+
+.preview-card{
+background:#0f172a;
+border-radius:20px;
+overflow:hidden;
+margin-bottom:25px;
+border:1px solid rgba(255,255,255,0.06);
+}
+
+.preview-banner{
+width:100%;
+height:190px;
+object-fit:cover;
+background:#020617;
+display:block;
+}
+
+.preview-content{
+padding:20px;
+text-align:center;
+}
+
+.preview-photo{
+width:120px;
+height:120px;
+border-radius:50%;
+object-fit:cover;
+border:5px solid #0f172a;
+margin-top:-80px;
+background:#222;
+}
+
+.preview-name{
+font-size:26px;
+font-weight:800;
+margin-top:10px;
+word-break:break-word;
+}
+
+.preview-user{
+color:#9ca3af;
+margin-top:4px;
+}
+
+.preview-bio{
+color:#d1d5db;
+margin-top:12px;
+font-size:14px;
+line-height:1.5;
+white-space:pre-wrap;
+word-break:break-word;
+}
+
+.form-group{
+margin-bottom:16px;
+}
+
+label{
+display:block;
+font-weight:700;
+margin-bottom:8px;
+font-size:14px;
+color:#e5e7eb;
+}
+
+input,
+textarea{
+width:100%;
+padding:15px;
+border:none;
+outline:none;
+border-radius:14px;
+background:#0f172a;
+color:white;
+font-size:15px;
+border:1px solid rgba(255,255,255,0.06);
+}
+
+textarea{
+height:110px;
+resize:none;
+}
+
+input:focus,
+textarea:focus{
+border-color:#7c3aed;
+}
+
+.help{
+font-size:12px;
+color:#9ca3af;
+margin-top:6px;
+}
+
+.buttons{
+display:flex;
+gap:12px;
+margin-top:22px;
+}
+
+button{
+flex:1;
+padding:15px;
+border:none;
+border-radius:14px;
+font-weight:800;
+cursor:pointer;
+font-size:15px;
+transition:.2s;
+}
+
+.save-btn{
+background:#7c3aed;
+color:white;
+}
+
+.save-btn:hover{
+background:#6d28d9;
+}
+
+.back-btn{
+background:#1f2937;
+color:white;
+}
+
+.back-btn:hover{
+background:#374151;
+}
+
+.status{
+margin-top:15px;
+text-align:center;
+font-weight:700;
+}
+
+.success{
+color:#22c55e;
+}
+
+.error{
+color:#ef4444;
+}
+
+@media(max-width:600px){
+.container{
+padding:18px;
+}
+
+h1{
+font-size:25px;
+}
+
+.preview-banner{
+height:150px;
+}
+
+.buttons{
+flex-direction:column;
+}
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Editar Perfil</h1>
+<p class="sub">Personalize seu nome, @, foto, banner e bio usando links do Catbox.</p>
+
+<div class="preview-card">
+<img id="previewBanner" class="preview-banner" src="https://files.catbox.moe/73yxoi.avif">
+
+<div class="preview-content">
+<img id="previewFoto" class="preview-photo" src="https://files.catbox.moe/zp9om9.png">
+
+<div id="previewNome" class="preview-name">Usuário</div>
+<div id="previewUsuario" class="preview-user">@user</div>
+<div id="previewBio" class="preview-bio">Sua bio aparecerá aqui.</div>
+</div>
+</div>
+
+<div class="form-group">
+<label>Nome</label>
+<input id="nomeInput" type="text" placeholder="Digite seu nome">
+</div>
+
+<div class="form-group">
+<label>Usuário / @</label>
+<input id="usuarioInput" type="text" placeholder="exemplo: gzeescripts">
+<p class="help">Não precisa colocar @, o site coloca sozinho.</p>
+</div>
+
+<div class="form-group">
+<label>Foto de perfil</label>
+<input id="fotoInput" type="text" placeholder="Cole o link da foto do Catbox.moe">
+<p class="help">Exemplo: https://files.catbox.moe/suafoto.png</p>
+</div>
+
+<div class="form-group">
+<label>Banner</label>
+<input id="bannerInput" type="text" placeholder="Cole o link do banner do Catbox.moe">
+<p class="help">Use imagem larga para ficar melhor no perfil.</p>
+</div>
+
+<div class="form-group">
+<label>Bio</label>
+<textarea id="bioInput" placeholder="Escreva algo sobre você..."></textarea>
+</div>
+
+<div class="buttons">
+<button class="back-btn" onclick="voltarDashboard()">Voltar</button>
+<button class="save-btn" onclick="salvarPerfil()">Salvar Perfil</button>
+</div>
+
+<div id="status" class="status"></div>
+
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getFirestore,
+doc,
+getDoc,
+setDoc,
+updateDoc
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+import {
+getAuth,
+onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const firebaseConfig = {
+apiKey: "AIzaSyDmuDzQBWi9G1DculuOy69v3BH0ulhUwcM",
+authDomain: "siteoficialgzee.firebaseapp.com",
+projectId: "siteoficialgzee",
+storageBucket: "siteoficialgzee.firebasestorage.app",
+messagingSenderId: "927527396643",
+appId: "1:927527396643:web:e1de375c6994d351995896"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+
+let me = null;
+
+const fotoPadrao = "https://files.catbox.moe/zp9om9.png";
+const bannerPadrao = "https://files.catbox.moe/73yxoi.avif";
+
+const nomeInput = document.getElementById("nomeInput");
+const usuarioInput = document.getElementById("usuarioInput");
+const fotoInput = document.getElementById("fotoInput");
+const bannerInput = document.getElementById("bannerInput");
+const bioInput = document.getElementById("bioInput");
+
+const previewNome = document.getElementById("previewNome");
+const previewUsuario = document.getElementById("previewUsuario");
+const previewFoto = document.getElementById("previewFoto");
+const previewBanner = document.getElementById("previewBanner");
+const previewBio = document.getElementById("previewBio");
+
+const statusDiv = document.getElementById("status");
+
+onAuthStateChanged(auth, async(user)=>{
+if(!user){
+window.location.href = "login.html";
+return;
+}
+
+me = user.uid;
+await carregarPerfil();
+});
+
+async function carregarPerfil(){
+const ref = doc(db,"usuarios",me);
+const snap = await getDoc(ref);
+
+if(!snap.exists()){
+await setDoc(ref,{
+nome:"Usuário",
+usuario:"user",
+foto:fotoPadrao,
+banner:bannerPadrao,
+bio:"",
+seguidores:[],
+seguindo:[],
+verificado:false,
+betaTester:false
+});
+}
+
+const novoSnap = await getDoc(ref);
+const u = novoSnap.data();
+
+nomeInput.value = u.nome || "";
+usuarioInput.value = u.usuario || "";
+fotoInput.value = u.foto || "";
+bannerInput.value = u.banner || "";
+bioInput.value = u.bio || "";
+
+atualizarPreview();
+}
+
+function limparUsuario(valor){
+return valor
+.toLowerCase()
+.trim()
+.replace("@","")
+.replace(/\s+/g,"")
+.replace(/[^a-z0-9._]/g,"");
+}
+
+function atualizarPreview(){
+const nome = nomeInput.value.trim() || "Usuário";
+const usuario = limparUsuario(usuarioInput.value) || "user";
+const foto = fotoInput.value.trim() || fotoPadrao;
+const banner = bannerInput.value.trim() || bannerPadrao;
+const bio = bioInput.value.trim() || "Sua bio aparecerá aqui.";
+
+previewNome.innerText = nome;
+previewUsuario.innerText = "@" + usuario;
+previewFoto.src = foto;
+previewBanner.src = banner;
+previewBio.innerText = bio;
+}
+
+nomeInput.addEventListener("input", atualizarPreview);
+usuarioInput.addEventListener("input", atualizarPreview);
+fotoInput.addEventListener("input", atualizarPreview);
+bannerInput.addEventListener("input", atualizarPreview);
+bioInput.addEventListener("input", atualizarPreview);
+
+previewFoto.onerror = ()=>{
+previewFoto.src = fotoPadrao;
+};
+
+previewBanner.onerror = ()=>{
+previewBanner.src = bannerPadrao;
+};
+
+window.salvarPerfil = async()=>{
+const nome = nomeInput.value.trim();
+const usuario = limparUsuario(usuarioInput.value);
+const foto = fotoInput.value.trim();
+const banner = bannerInput.value.trim();
+const bio = bioInput.value.trim();
+
+if(!nome){
+mostrarStatus("Coloque um nome.", "error");
+return;
+}
+
+if(!usuario){
+mostrarStatus("Coloque um usuário válido.", "error");
+return;
+}
+
+if(foto && !foto.startsWith("https://files.catbox.moe/")){
+mostrarStatus("A foto precisa ser um link do Catbox.", "error");
+return;
+}
+
+if(banner && !banner.startsWith("https://files.catbox.moe/")){
+mostrarStatus("O banner precisa ser um link do Catbox.", "error");
+return;
+}
+
+try{
+const ref = doc(db,"usuarios",me);
+const snap = await getDoc(ref);
+
+const dadosNovos = {
+nome:nome,
+usuario:usuario,
+foto:foto || fotoPadrao,
+banner:banner || bannerPadrao,
+bio:bio,
+atualizadoEm:Date.now()
+};
+
+if(snap.exists()){
+await updateDoc(ref,dadosNovos);
+}else{
+await setDoc(ref,{
+...dadosNovos,
+seguidores:[],
+seguindo:[],
+verificado:false,
+betaTester:false
+});
+}
+
+mostrarStatus("Perfil salvo com sucesso!", "success");
+
+setTimeout(()=>{
+window.location.href = "dashboard.html";
+},1000);
+
+}catch(error){
+console.error(error);
+mostrarStatus("Erro ao salvar perfil.", "error");
+}
+};
+
+function mostrarStatus(texto,tipo){
+statusDiv.innerText = texto;
+statusDiv.className = "status " + tipo;
+}
+
+window.voltarDashboard = ()=>{
+window.location.href = "dashboard.html";
+};
+</script>
+
+</body>
+</html>
