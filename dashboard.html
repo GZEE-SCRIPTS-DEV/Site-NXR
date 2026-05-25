@@ -312,6 +312,43 @@ padding:12px;
 border-radius:14px;
 margin-bottom:12px;
 cursor:pointer;
+display:flex;
+align-items:flex-start;
+gap:12px;
+}
+
+.chat-photo{
+width:44px;
+height:44px;
+border-radius:50%;
+object-fit:cover;
+background:#222;
+flex-shrink:0;
+}
+
+.chat-content{
+flex:1;
+min-width:0;
+}
+
+.chat-name{
+display:flex;
+align-items:center;
+gap:6px;
+flex-wrap:wrap;
+font-weight:700;
+}
+
+.chat-user{
+font-size:12px;
+color:#9ca3af;
+font-weight:400;
+}
+
+.chat-message p{
+color:#d1d5db;
+margin-top:4px;
+word-break:break-word;
 }
 
 .chat-send{
@@ -814,8 +851,16 @@ const m = docSnap.data();
 
 div.innerHTML += `
 <div class="chat-message" onclick="openProfile('${m.uid}')">
-<b>${m.nome || "Usuário"}</b>
+<img class="chat-photo" src="${m.foto || fotoPadrao}">
+<div class="chat-content">
+<div class="chat-name">
+${m.nome || "Usuário"}
+${m.verificado ? `<span class="verified">✔</span>` : ""}
+${m.betaTester ? `<span class="beta">⚒️</span>` : ""}
+<span class="chat-user">@${m.usuario || "user"}</span>
+</div>
 <p>${m.texto}</p>
+</div>
 </div>
 `;
 });
@@ -836,7 +881,10 @@ const u = userSnap.exists() ? userSnap.data() : {};
 await addDoc(collection(db,"chat"),{
 uid: me,
 nome: u.nome || "Usuário",
+usuario: u.usuario || "user",
 foto: u.foto || "",
+verificado: u.verificado === true,
+betaTester: u.betaTester === true,
 texto,
 timestamp: Date.now()
 });
