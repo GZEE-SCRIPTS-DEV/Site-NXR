@@ -312,42 +312,47 @@ padding:12px;
 border-radius:14px;
 margin-bottom:12px;
 cursor:pointer;
+}
+
+.chat-top{
 display:flex;
 align-items:flex-start;
 gap:12px;
 }
 
 .chat-photo{
-width:44px;
-height:44px;
+width:50px;
+height:50px;
 border-radius:50%;
 object-fit:cover;
 background:#222;
 flex-shrink:0;
 }
 
-.chat-content{
+.chat-info{
 flex:1;
 min-width:0;
 }
 
-.chat-name{
+.chat-name-line{
 display:flex;
 align-items:center;
 gap:6px;
 flex-wrap:wrap;
-font-weight:700;
+}
+
+.chat-name-line b{
+font-size:16px;
 }
 
 .chat-user{
-font-size:12px;
 color:#9ca3af;
-font-weight:400;
+font-size:13px;
 }
 
-.chat-message p{
-color:#d1d5db;
+.chat-text{
 margin-top:4px;
+color:#fff;
 word-break:break-word;
 }
 
@@ -838,32 +843,66 @@ await carregarComentarios(postId);
 loadFeed();
 };
 
+function seloVerificadoHtml(valor){
+return valor ? `<span class="verified">✔</span>` : "";
+}
+
+function seloBetaHtml(valor){
+return valor ? `<span class="beta">⚒️</span>` : "";
+}
+
+async function loadChatUserData(m){
+let dados = {...m};
+
+if(!dados.uid) return dados;
+
+if(!dados.usuario || !dados.foto || dados.verificado === undefined || dados.betaTester === undefined){
+const userSnap = await getDoc(doc(db,"usuarios",dados.uid));
+
+if(userSnap.exists()){
+const u = userSnap.data();
+
+dados.nome = dados.nome || u.nome || "Usuário";
+dados.usuario = dados.usuario || u.usuario || "user";
+dados.foto = dados.foto || u.foto || "";
+dados.verificado = dados.verificado !== undefined ? dados.verificado : (u.verificado || false);
+dados.betaTester = dados.betaTester !== undefined ? dados.betaTester : (u.betaTester || false);
+}
+}
+
+return dados;
+}
+
 function loadChat(){
 const div = document.getElementById("chatMessages");
 
 onSnapshot(
 query(collection(db,"chat"),orderBy("timestamp","asc")),
-(snapshot)=>{
+async(snapshot)=>{
 div.innerHTML = "";
 
-snapshot.forEach(docSnap=>{
-const m = docSnap.data();
+for(const docSnap of snapshot.docs){
+const m = await loadChatUserData(docSnap.data());
 
 div.innerHTML += `
 <div class="chat-message" onclick="openProfile('${m.uid}')">
+<div class="chat-top">
 <img class="chat-photo" src="${m.foto || fotoPadrao}">
-<div class="chat-content">
-<div class="chat-name">
-${m.nome || "Usuário"}
-${m.verificado ? `<span class="verified">✔</span>` : ""}
-${m.betaTester ? `<span class="beta">⚒️</span>` : ""}
+
+<div class="chat-info">
+<div class="chat-name-line">
+<b>${m.nome || "Usuário"}</b>
+${seloVerificadoHtml(m.verificado)}
+${seloBetaHtml(m.betaTester)}
 <span class="chat-user">@${m.usuario || "user"}</span>
 </div>
-<p>${m.texto}</p>
+
+<p class="chat-text">${m.texto || ""}</p>
+</div>
 </div>
 </div>
 `;
-});
+}
 
 div.scrollTop = div.scrollHeight;
 });
@@ -883,8 +922,8 @@ uid: me,
 nome: u.nome || "Usuário",
 usuario: u.usuario || "user",
 foto: u.foto || "",
-verificado: u.verificado === true,
-betaTester: u.betaTester === true,
+verificado: u.verificado || false,
+betaTester: u.betaTester || false,
 texto,
 timestamp: Date.now()
 });
