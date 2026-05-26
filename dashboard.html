@@ -503,6 +503,136 @@ background:#374151;
 background:#ef4444;
 }
 
+.message-btn{
+margin-top:12px;
+padding:15px 28px;
+border:none;
+border-radius:14px;
+background:#2563eb;
+color:white;
+font-weight:800;
+cursor:pointer;
+transition:.2s;
+}
+
+.message-btn:hover{
+background:#1d4ed8;
+}
+
+.profile-posts-area{
+margin-top:20px;
+background:#111827;
+border-radius:20px;
+padding:20px;
+border:1px solid rgba(255,255,255,0.05);
+}
+
+.profile-posts-title{
+font-size:22px;
+font-weight:800;
+margin-bottom:15px;
+}
+
+.private-chat-bg{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.65);
+display:none;
+align-items:center;
+justify-content:center;
+z-index:10000;
+padding:20px;
+}
+
+.private-chat-box{
+width:100%;
+max-width:520px;
+height:80vh;
+background:#111827;
+border:1px solid rgba(255,255,255,.08);
+border-radius:22px;
+box-shadow:0 25px 80px rgba(0,0,0,.45);
+display:flex;
+flex-direction:column;
+overflow:hidden;
+}
+
+.private-chat-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:16px 18px;
+border-bottom:1px solid rgba(255,255,255,.08);
+}
+
+.private-chat-header h3{
+font-size:18px;
+}
+
+.private-chat-header button{
+background:#374151;
+color:white;
+border:none;
+border-radius:12px;
+padding:9px 12px;
+font-weight:800;
+cursor:pointer;
+}
+
+.private-chat-messages{
+flex:1;
+overflow-y:auto;
+padding:16px;
+display:flex;
+flex-direction:column;
+gap:10px;
+}
+
+.private-msg{
+max-width:78%;
+padding:11px 13px;
+border-radius:15px;
+background:#0f172a;
+color:white;
+word-break:break-word;
+}
+
+.private-msg.mine{
+align-self:flex-end;
+background:#7c3aed;
+}
+
+.private-msg.other{
+align-self:flex-start;
+}
+
+.private-chat-send{
+display:flex;
+gap:10px;
+padding:14px;
+border-top:1px solid rgba(255,255,255,.08);
+}
+
+.private-chat-send input{
+flex:1;
+padding:13px;
+border:none;
+border-radius:13px;
+background:#020617;
+color:white;
+outline:none;
+}
+
+.private-chat-send button{
+padding:13px 16px;
+border:none;
+border-radius:13px;
+background:#7c3aed;
+color:white;
+font-weight:800;
+cursor:pointer;
+}
+
 
 @media(max-width:900px){
 body{flex-direction:column;overflow:auto;}
@@ -511,7 +641,7 @@ body{flex-direction:column;overflow:auto;}
 .sidebar button{min-width:160px;text-align:center;}
 .main{height:auto;}
 .users-grid,.groups-grid{grid-template-columns:1fr;}
-.post-actions,.chat-send,.comment-send{flex-direction:column;}
+.post-actions,.chat-send,.comment-send,.private-chat-send{flex-direction:column;}
 }
 </style>
 </head>
@@ -590,7 +720,16 @@ Editar Perfil
 <button id="seguirBtn" class="follow-btn" onclick="acaoSeguir()">
 Seguir
 </button>
+
+<button id="mensagemBtn" class="message-btn" onclick="abrirChatPrivado(perfilAtual)">
+Enviar mensagem
+</button>
 </div>
+</div>
+
+<div class="profile-posts-area">
+<div class="profile-posts-title">Posts deste perfil</div>
+<div id="perfilPosts"></div>
 </div>
 </div>
 
@@ -603,6 +742,20 @@ Seguir
 <div class="modal-actions">
 <button class="cancel-btn" onclick="fecharModalPararSeguir()">Cancelar</button>
 <button class="confirm-btn" onclick="confirmarPararSeguir()">Confirmar</button>
+</div>
+</div>
+</div>
+
+<div class="private-chat-bg" id="privateChatModal">
+<div class="private-chat-box">
+<div class="private-chat-header">
+<h3 id="privateChatTitle">Chat privado</h3>
+<button onclick="fecharChatPrivado()">Fechar</button>
+</div>
+<div class="private-chat-messages" id="privateChatMessages"></div>
+<div class="private-chat-send">
+<input id="privateChatInput" placeholder="Digite sua mensagem privada...">
+<button onclick="enviarMensagemPrivada()">Enviar</button>
 </div>
 </div>
 </div>
@@ -647,6 +800,8 @@ let me = null;
 let perfilAtual = null;
 let perfilAtualNome = "Usuário";
 let confirmarPararUid = null;
+let chatPrivadoUid = null;
+let unsubscribeChatPrivado = null;
 
 const fotoPadrao = "https://files.catbox.moe/zp9om9.png";
 const bannerPadrao = "https://files.catbox.moe/73yxoi.avif";
@@ -792,24 +947,9 @@ document.getElementById("media").value = "";
 loadFeed();
 };
 
-async function loadFeed(){
-const feed = document.getElementById("feed");
-feed.innerHTML = "";
-
-const q = query(collection(db,"posts"),orderBy("timestamp","desc"));
-const snap = await getDocs(q);
-
-for(const docSnap of snap.docs){
-const postId = docSnap.id;
-const p = docSnap.data();
-
-let u = {};
-const userSnap = await getDoc(doc(db,"usuarios",p.uid));
-if(userSnap.exists()) u = userSnap.data();
-
+function montarPostHtml(postId,p,u){
 const curtiu = (p.likes || []).includes(me);
-
-feed.innerHTML += `
+return `
 <div class="post">
 
 <div class="post-header" onclick="openProfile('${p.uid}')">
@@ -850,6 +990,46 @@ ${curtiu ? "❤️" : "🤍"} ${(p.likes || []).length}
 </div>
 `;
 }
+
+async function loadFeed(){
+const feed = document.getElementById("feed");
+feed.innerHTML = "";
+
+const q = query(collection(db,"posts"),orderBy("timestamp","desc"));
+const snap = await getDocs(q);
+
+for(const docSnap of snap.docs){
+const postId = docSnap.id;
+const p = docSnap.data();
+
+let u = {};
+const userSnap = await getDoc(doc(db,"usuarios",p.uid));
+if(userSnap.exists()) u = userSnap.data();
+
+feed.innerHTML += montarPostHtml(postId,p,u);
+}
+}
+
+async function carregarPostsDoPerfil(uid){
+const div = document.getElementById("perfilPosts");
+if(!div) return;
+div.innerHTML = `<p style="color:#9ca3af;">Carregando posts...</p>`;
+
+const q = query(collection(db,"posts"),orderBy("timestamp","desc"));
+const snap = await getDocs(q);
+
+let u = {};
+const userSnap = await getDoc(doc(db,"usuarios",uid));
+if(userSnap.exists()) u = userSnap.data();
+
+let html = "";
+for(const docSnap of snap.docs){
+const p = docSnap.data();
+if(p.uid !== uid) continue;
+html += montarPostHtml(docSnap.id,p,u);
+}
+
+div.innerHTML = html || `<p style="color:#9ca3af;">Esse usuário ainda não postou nada no feed.</p>`;
 }
 
 window.curtirPost = async(postId)=>{
@@ -1048,13 +1228,18 @@ perfilAtualNome = u.nome || "Usuário";
 
 const editarBtn = document.getElementById("editarBtn");
 const seguirBtn = document.getElementById("seguirBtn");
+const mensagemBtn = document.getElementById("mensagemBtn");
+
+await carregarPostsDoPerfil(uid);
 
 if(uid === me){
 editarBtn.style.display = "inline-block";
 seguirBtn.style.display = "none";
+if(mensagemBtn) mensagemBtn.style.display = "none";
 }else{
 editarBtn.style.display = "none";
 seguirBtn.style.display = "inline-block";
+if(mensagemBtn) mensagemBtn.style.display = "none";
 await atualizarBotaoSeguir(uid);
 }
 }
@@ -1071,6 +1256,12 @@ const jaSegue = seguindoLista.includes(uid);
 seguirBtn.dataset.uid = uid;
 seguirBtn.innerText = jaSegue ? "Seguindo" : "Seguir";
 seguirBtn.classList.toggle("following", jaSegue);
+
+const mensagemBtn = document.getElementById("mensagemBtn");
+if(mensagemBtn){
+mensagemBtn.style.display = jaSegue ? "inline-block" : "none";
+mensagemBtn.dataset.uid = uid;
+}
 }
 
 window.acaoSeguir = async()=>{
@@ -1125,6 +1316,100 @@ fecharModalPararSeguir();
 await loadPerfil(uid);
 loadUsers();
 };
+
+
+function gerarChatId(uid1,uid2){
+return [uid1,uid2].sort().join("_");
+}
+
+window.abrirChatPrivado = async(uid)=>{
+if(!uid || uid === me) return;
+
+const meuSnap = await getDoc(doc(db,"usuarios",me));
+const meusDados = meuSnap.exists() ? meuSnap.data() : {};
+const jaSegue = (meusDados.seguindo || []).includes(uid);
+
+if(!jaSegue){
+alert("Você precisa seguir essa pessoa para enviar mensagem.");
+return;
+}
+
+chatPrivadoUid = uid;
+
+const userSnap = await getDoc(doc(db,"usuarios",uid));
+const u = userSnap.exists() ? userSnap.data() : {};
+document.getElementById("privateChatTitle").innerText = "Chat com " + (u.nome || "Usuário");
+document.getElementById("privateChatModal").style.display = "flex";
+document.getElementById("privateChatMessages").innerHTML = `<p style="color:#9ca3af;">Carregando mensagens...</p>`;
+
+const chatId = gerarChatId(me,uid);
+
+if(unsubscribeChatPrivado) unsubscribeChatPrivado();
+
+unsubscribeChatPrivado = onSnapshot(
+query(collection(db,"privateChats",chatId,"messages"),orderBy("timestamp","asc")),
+(snapshot)=>{
+const div = document.getElementById("privateChatMessages");
+div.innerHTML = "";
+
+if(snapshot.empty){
+div.innerHTML = `<p style="color:#9ca3af;text-align:center;">Nenhuma mensagem ainda. Comece a conversa.</p>`;
+return;
+}
+
+snapshot.forEach(docSnap=>{
+const m = docSnap.data();
+const mine = m.uid === me;
+div.innerHTML += `
+<div class="private-msg ${mine ? "mine" : "other"}">
+${m.texto || ""}
+</div>
+`;
+});
+
+div.scrollTop = div.scrollHeight;
+}
+);
+};
+
+window.fecharChatPrivado = ()=>{
+document.getElementById("privateChatModal").style.display = "none";
+chatPrivadoUid = null;
+if(unsubscribeChatPrivado){
+unsubscribeChatPrivado();
+unsubscribeChatPrivado = null;
+}
+};
+
+window.enviarMensagemPrivada = async()=>{
+const input = document.getElementById("privateChatInput");
+const texto = input.value.trim();
+if(!texto || !chatPrivadoUid) return;
+
+const meuSnap = await getDoc(doc(db,"usuarios",me));
+const meusDados = meuSnap.exists() ? meuSnap.data() : {};
+const jaSegue = (meusDados.seguindo || []).includes(chatPrivadoUid);
+
+if(!jaSegue){
+alert("Você precisa seguir essa pessoa para enviar mensagem.");
+return;
+}
+
+const chatId = gerarChatId(me,chatPrivadoUid);
+
+await addDoc(collection(db,"privateChats",chatId,"messages"),{
+uid: me,
+para: chatPrivadoUid,
+texto,
+timestamp: Date.now()
+});
+
+input.value = "";
+};
+
+document.getElementById("privateChatInput").addEventListener("keydown",(e)=>{
+if(e.key === "Enter") enviarMensagemPrivada();
+});
 
 </script>
 
