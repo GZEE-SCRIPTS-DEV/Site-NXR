@@ -1347,7 +1347,7 @@ const chatId = gerarChatId(me,uid);
 if(unsubscribeChatPrivado) unsubscribeChatPrivado();
 
 unsubscribeChatPrivado = onSnapshot(
-query(collection(db,"privateChats",chatId,"messages"),orderBy("timestamp","asc")),
+query(collection(db,"chatsPrivados",chatId,"mensagens"),orderBy("timestamp","asc")),
 (snapshot)=>{
 const div = document.getElementById("privateChatMessages");
 div.innerHTML = "";
@@ -1397,7 +1397,7 @@ return;
 
 const chatId = gerarChatId(me,chatPrivadoUid);
 
-await addDoc(collection(db,"privateChats",chatId,"messages"),{
+await addDoc(collection(db,"chatsPrivados",chatId,"mensagens"),{
 uid: me,
 para: chatPrivadoUid,
 texto,
