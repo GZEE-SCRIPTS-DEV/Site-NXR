@@ -721,7 +721,7 @@ Editar Perfil
 Seguir
 </button>
 
-<button id="mensagemBtn" class="message-btn" onclick="abrirChatPrivado(perfilAtual)">
+<button id="mensagemBtn" class="message-btn" onclick="abrirChatPrivado()">
 Enviar mensagem
 </button>
 </div>
@@ -1323,8 +1323,8 @@ function gerarChatId(uid1,uid2){
 return [uid1,uid2].sort().join("_");
 }
 
-window.abrirChatPrivado = async(uid)=>{
-try{
+window.abrirChatPrivado = async(uid = null)=>{
+uid = uid || perfilAtual;
 if(!uid || uid === me) return;
 
 const meuSnap = await getDoc(doc(db,"usuarios",me));
@@ -1346,7 +1346,6 @@ document.getElementById("privateChatMessages").innerHTML = `<p style="color:#9ca
 
 const chatId = gerarChatId(me,uid);
 
-// cria/atualiza o documento principal do chat automaticamente
 await setDoc(doc(db,"chatsPrivados",chatId),{
 participantes:[me,uid],
 ultimaMensagem:"",
@@ -1377,16 +1376,8 @@ ${m.texto || ""}
 });
 
 div.scrollTop = div.scrollHeight;
-},
-(error)=>{
-console.error("Erro ao carregar chat privado:",error);
-alert("Erro ao carregar chat privado: " + error.message);
 }
 );
-}catch(error){
-console.error("Erro ao abrir chat privado:",error);
-alert("Erro ao abrir chat privado: " + error.message);
-}
 };
 
 window.fecharChatPrivado = ()=>{
@@ -1399,7 +1390,6 @@ unsubscribeChatPrivado = null;
 };
 
 window.enviarMensagemPrivada = async()=>{
-try{
 const input = document.getElementById("privateChatInput");
 const texto = input.value.trim();
 if(!texto || !chatPrivadoUid) return;
@@ -1429,10 +1419,6 @@ timestamp: Date.now()
 });
 
 input.value = "";
-}catch(error){
-console.error("Erro ao enviar mensagem privada:",error);
-alert("Erro ao enviar mensagem privada: " + error.message);
-}
 };
 
 document.getElementById("privateChatInput").addEventListener("keydown",(e)=>{
