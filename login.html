@@ -6,10 +6,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Login - NXR</title>
+
 <link rel="icon" type="image/png" sizes="64x64" href="https://files.catbox.moe/am9d4c.png">
 <link rel="icon" type="image/png" sizes="192x192" href="https://files.catbox.moe/am9d4c.png">
 <link rel="apple-touch-icon" href="https://files.catbox.moe/am9d4c.png">
+
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
 
@@ -103,6 +106,13 @@ text-align:center;margin-top:25px;font-size:14px;color:#9ca3af;cursor:pointer;
 display:none;padding:12px;border-radius:10px;
 background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);
 color:#ef4444;font-size:14px;margin-bottom:15px;
+word-break:break-word;
+}
+
+.loading-msg{
+display:none;padding:12px;border-radius:10px;
+background:rgba(37,99,235,0.12);border:1px solid rgba(96,165,250,0.3);
+color:#93c5fd;font-size:14px;margin-bottom:15px;
 }
 
 @media(max-width:500px){
@@ -110,6 +120,7 @@ color:#ef4444;font-size:14px;margin-bottom:15px;
 }
 </style>
 </head>
+
 <body>
 
 <div class="login-container">
@@ -118,15 +129,16 @@ color:#ef4444;font-size:14px;margin-bottom:15px;
 <p class="subtitle" id="subtitle">Entre na sua conta</p>
 
 <div class="error-msg" id="errorMsg"></div>
+<div class="loading-msg" id="loadingMsg">Verificando login...</div>
 
 <div class="form-group">
 <label>Email</label>
-<input type="email" id="email" placeholder="seu@email.com">
+<input type="email" id="email" placeholder="seu@email.com" autocomplete="email">
 </div>
 
 <div class="form-group">
 <label>Senha</label>
-<input type="password" id="senha" placeholder="••••••••">
+<input type="password" id="senha" placeholder="••••••••" autocomplete="current-password">
 </div>
 
 <button class="btn btn-primary" id="mainBtn" onclick="handleAuth()">ENTRAR</button>
@@ -145,10 +157,22 @@ Continuar com Google
 </div>
 
 <script type="module">
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import {getAuth,createUserWithEmailAndPassword,signInWithEmailAndPassword,GoogleAuthProvider,signInWithPopup} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import {getFirestore,doc,setDoc,getDoc} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import {
+getAuth,
+createUserWithEmailAndPassword,
+signInWithEmailAndPassword,
+GoogleAuthProvider,
+signInWithRedirect,
+getRedirectResult
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+getFirestore,
+doc,
+setDoc,
+getDoc
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
 apiKey: "AIzaSyDmuDzQBWi9G1DculuOy69v3BH0ulhUwcM",
@@ -162,22 +186,32 @@ appId: "1:927527396643:web:e1de375c6994d351995896"
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
-const provider = new GoogleAuthProvider();
 
 let mode = "login";
 
 function showError(msg){
-const el = document.getElementById('errorMsg');
+const el = document.getElementById("errorMsg");
 el.textContent = msg;
-el.style.display = 'block';
-setTimeout(() => el.style.display = 'none', 5000);
+el.style.display = "block";
+setTimeout(() => el.style.display = "none", 7000);
+}
+
+function showLoading(msg){
+const el = document.getElementById("loadingMsg");
+el.textContent = msg;
+el.style.display = "block";
+}
+
+function hideLoading(){
+document.getElementById("loadingMsg").style.display = "none";
 }
 
 async function criarUsuarioSeNaoExistir(user){
-const ref = doc(db,"usuarios",user.uid);
+const ref = doc(db, "usuarios", user.uid);
 const snap = await getDoc(ref);
+
 if(!snap.exists()){
-await setDoc(ref,{
+await setDoc(ref, {
 nome: user.displayName || "Usuário",
 usuario: (user.email || "user").split("@")[0],
 foto: user.photoURL || "",
@@ -201,90 +235,127 @@ showError("Preencha todos os campos!");
 return;
 }
 
-try{
+try {
+showLoading("Entrando...");
+
+let res;
+
 if(mode === "login"){
-const res = await signInWithEmailAndPassword(auth,email,senha);
-await criarUsuarioSeNaoExistir(res.user);
-}else{
+res = await signInWithEmailAndPassword(auth, email, senha);
+} else {
 if(senha.length < 6){
+hideLoading();
 showError("A senha deve ter no mínimo 6 caracteres!");
 return;
 }
-const res = await createUserWithEmailAndPassword(auth,email,senha);
-await criarUsuarioSeNaoExistir(res.user);
+
+res = await createUserWithEmailAndPassword(auth, email, senha);
 }
+
+await criarUsuarioSeNaoExistir(res.user);
 window.location.href = "dashboard.html";
-}catch(e){
+
+} catch(e) {
+hideLoading();
+
 let msg = "Erro ao autenticar!";
-if(e.code === 'auth/user-not-found') msg = "Usuário não encontrado!";
-if(e.code === 'auth/wrong-password') msg = "Senha incorreta!";
-if(e.code === 'auth/email-already-in-use') msg = "Email já cadastrado!";
-if(e.code === 'auth/invalid-email') msg = "Email inválido!";
+
+if(e.code === "auth/user-not-found") msg = "Usuário não encontrado!";
+if(e.code === "auth/wrong-password") msg = "Senha incorreta!";
+if(e.code === "auth/email-already-in-use") msg = "Email já cadastrado!";
+if(e.code === "auth/invalid-email") msg = "Email inválido!";
+if(e.code === "auth/invalid-credential") msg = "Email ou senha incorretos!";
+if(e.code === "auth/network-request-failed") msg = "Erro de internet. Verifique sua conexão!";
+
 showError(msg);
 }
-}
+};
 
 window.loginGoogle = async () => {
-
-try{
+try {
+showLoading("Abrindo login do Google...");
 
 const provider = new GoogleAuthProvider();
 
 provider.setCustomParameters({
-prompt:"select_account"
+prompt: "select_account"
 });
 
-const res = await signInWithPopup(auth,provider);
+await signInWithRedirect(auth, provider);
 
-await criarUsuarioSeNaoExistir(res.user);
-
-window.location.href = "dashboard.html";
-
-}catch(e){
-
+} catch(e) {
+hideLoading();
 console.log(e);
-
-if(e.code === "auth/popup-closed-by-user"){
-showError("Login cancelado!");
-return;
-}
 
 if(e.code === "auth/unauthorized-domain"){
 showError("Domínio não autorizado no Firebase!");
 return;
 }
 
-if(e.code === "auth/popup-blocked"){
-showError("O navegador bloqueou o popup!");
+if(e.code === "auth/network-request-failed"){
+showError("Erro de internet. Verifique sua conexão!");
 return;
 }
 
 showError(e.message);
+}
+};
 
+getRedirectResult(auth)
+.then(async (res) => {
+if(res && res.user){
+showLoading("Finalizando login...");
+await criarUsuarioSeNaoExistir(res.user);
+window.location.href = "dashboard.html";
+} else {
+hideLoading();
+}
+})
+.catch((e) => {
+hideLoading();
+console.log(e);
+
+if(e.code === "auth/unauthorized-domain"){
+showError("Domínio não autorizado no Firebase!");
+return;
 }
 
+if(e.code === "auth/web-storage-unsupported"){
+showError("O WebView do APK não liberou cookies/armazenamento. Ative cookies/localStorage no Median.");
+return;
 }
-  
+
+if(e.code === "auth/network-request-failed"){
+showError("Erro de internet. Verifique sua conexão!");
+return;
+}
+
+showError(e.message);
+});
+
 window.toggleMode = () => {
 mode = mode === "login" ? "cadastro" : "login";
+
 if(mode === "login"){
 document.getElementById("subtitle").innerText = "Entre na sua conta";
 document.getElementById("mainBtn").innerText = "ENTRAR";
 document.getElementById("switchText").innerHTML = "Não tem conta? <span style='color:#7c3aed;font-weight:700'>Criar conta</span>";
-}else{
+document.getElementById("senha").setAttribute("autocomplete", "current-password");
+} else {
 document.getElementById("subtitle").innerText = "Crie sua conta grátis";
 document.getElementById("mainBtn").innerText = "CADASTRAR";
 document.getElementById("switchText").innerHTML = "Já tem conta? <span style='color:#7c3aed;font-weight:700'>Entrar</span>";
+document.getElementById("senha").setAttribute("autocomplete", "new-password");
 }
-}
+};
 
-document.getElementById('email').addEventListener('keypress', e => {
-if(e.key === 'Enter') handleAuth();
-});
-document.getElementById('senha').addEventListener('keypress', e => {
-if(e.key === 'Enter') handleAuth();
+document.getElementById("email").addEventListener("keypress", e => {
+if(e.key === "Enter") handleAuth();
 });
 
+document.getElementById("senha").addEventListener("keypress", e => {
+if(e.key === "Enter") handleAuth();
+});
 </script>
 
 </body>
